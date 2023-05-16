@@ -1,0 +1,10 @@
+query GetUserBooks($userId: Int, $status: String, $offset: Int, $pageSize: Int) {
+  userBooks(where: { userId: { equals: $userId }, status: { equals: $status } },skip: $offset, take: $pageSize) {
+    id
+    date
+    book {
+      title
+      author
+    }
+  }
+}

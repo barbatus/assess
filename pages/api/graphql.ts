@@ -1,9 +1,9 @@
 import "reflect-metadata";
+import path from "path";
+import Cors from 'cors';
 import {ApolloServer} from 'apollo-server-micro';
 import { buildSchema } from 'type-graphql';
-import path from "path";
 import { NextApiRequest, NextApiResponse } from 'next';
-import Cors from 'cors';
 
 import { PrismaClient } from "@prisma/client";
 
