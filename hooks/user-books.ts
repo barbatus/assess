@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
-import { GetUserBooks } from './queries.graphql';
+import { GetUserBooks } from '~/graphql/queries.graphql';
 
-import { UserBook, User, UserBookOrderByWithRelationInput } from '~/prisma/generated/type-graphql';
+import { UserBook, User, UserBookOrderByWithRelationInput, UserBookWhereInput } from '~/prisma/generated/type-graphql';
 
-export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByWithRelationInput[], status: UserBook['status']  }) => {
+export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByWithRelationInput[], where: UserBookWhereInput, status: UserBook['status']  }) => {
   const [page, setPage] = useState(0);
   const [books, setBooks] = useState<UserBook[]>([]);
 
@@ -16,6 +16,7 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
       status: opts.status,
       offset: page * 10,
       pageSize: 10,
+      where: { userId: { equals: 1 }, status: { equals: opts.status }, ...opts.where },
       order: opts.order,
     },
   });
