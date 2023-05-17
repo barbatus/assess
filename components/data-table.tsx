@@ -1,4 +1,5 @@
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { useCallback, useEffect, useState } from "react";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable, SortingState, getSortedRowModel, Updater } from "@tanstack/react-table";
 
 import {
   Table,
@@ -13,6 +14,7 @@ import { Button } from "~/components/ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onSorting: (sorting: SortingState) => void,
   onNextPage: () => void,
   onPrevPage: () => void,
 }
@@ -23,12 +25,23 @@ declare module '@tanstack/table-core' {
   }
 }
 
-export default function DataTable<TData, TValue>({ columns, data, onNextPage, onPrevPage }: DataTableProps<TData, TValue>) {
+export default function DataTable<TData, TValue>({ columns, data, onSorting, onNextPage, onPrevPage }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([{ id: "book_title", desc: false }])
+  useEffect(() => {
+    onSorting(sorting);
+  }, [sorting]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
+    manualSorting: true,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   return (

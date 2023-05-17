@@ -1,5 +1,5 @@
-query GetUserBooks($userId: Int, $status: String, $offset: Int, $pageSize: Int) {
-  userBooks(where: { userId: { equals: $userId }, status: { equals: $status } },skip: $offset, take: $pageSize) {
+query GetUserBooks($userId: Int, $status: String, $order: [UserBookOrderByWithRelationInput!], $offset: Int, $pageSize: Int) {
+  userBooks(where: { userId: { equals: $userId }, status: { equals: $status } }, orderBy: $order, skip: $offset, take: $pageSize) {
     id
     date
     book {

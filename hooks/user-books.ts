@@ -3,12 +3,12 @@ import { useQuery } from '@apollo/client';
 
 import { GetUserBooks } from './queries.graphql';
 
-import { UserBook, User } from '~/prisma/generated/type-graphql';
+import { UserBook, User, UserBookOrderByWithRelationInput } from '~/prisma/generated/type-graphql';
 
-export const useUserBooks = (opts: { userId: User['id'], status: UserBook['status']  }) => {
+export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByWithRelationInput[], status: UserBook['status']  }) => {
   const [page, setPage] = useState(0);
   const [books, setBooks] = useState<UserBook[]>([]);
- 
+
   const { data, loading, error } = useQuery<{ userBooks: UserBook[] }>(GetUserBooks, {
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -16,6 +16,7 @@ export const useUserBooks = (opts: { userId: User['id'], status: UserBook['statu
       status: opts.status,
       offset: page * 10,
       pageSize: 10,
+      order: opts.order,
     },
   });
 
