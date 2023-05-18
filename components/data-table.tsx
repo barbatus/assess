@@ -35,7 +35,7 @@ declare module "@tanstack/table-core" {
   }
 }
 
-export default function DataTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   onFiltering,

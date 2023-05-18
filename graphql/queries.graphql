@@ -3,6 +3,19 @@ query GetUserBooks($where: UserBookWhereInput, $order: [UserBookOrderByWithRelat
     id
     date
     book {
+      id
+      title
+      author
+    }
+  }
+}
+
+mutation UpdateUserBook($data: UserBookUpdateInput!, $where: UserBookWhereUniqueInput!) {
+  updateOneUserBook(data: $data, where: $where) {
+    id
+    date
+    book {
+      id
       title
       author
     }

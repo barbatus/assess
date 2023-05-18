@@ -9,7 +9,8 @@
     "lint": "next lint",
     "prettier": "prettier --write **.{tsx,ts,js}",
     "generate": "prisma generate",
-    "migrate": "prisma migrate reset -f"
+    "migrate": "prisma migrate dev",
+    "reset:db": "prisma migrate reset -f"
   },
   "prisma": {
     "seed": "node -r @swc-node/register prisma/seed.ts"
@@ -18,6 +19,7 @@
     "@apollo/client": "^3.7.14",
     "@next/font": "^13.1.3",
     "@prisma/client": "^4.14.0",
+    "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.1",
     "@radix-ui/react-tabs": "^1.0.3",
     "@tanstack/react-table": "^8.9.1",
@@ -29,6 +31,7 @@
     "lucide-react": "^0.217.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-simple-star-rating": "^5.1.7",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "2.0.0-beta.1"
   },

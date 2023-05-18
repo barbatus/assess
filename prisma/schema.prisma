@@ -42,5 +42,6 @@ model UserBook {
   bookId    Int
   date      DateTime
   status    String
+  rating    Int?
   @@unique([userId, bookId])
 }

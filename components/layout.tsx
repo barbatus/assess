@@ -1,9 +1,13 @@
+import { useEffect } from "react";
 import { Inter } from "@next/font/google";
 import clsx from "clsx";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    document.body.classList.add("tw");
+  });
   return (
     <main className={clsx("flex h-screen flex-col", inter.className)}>
       <nav className="fixed top-0 z-50 w-full border-b border-base-300">

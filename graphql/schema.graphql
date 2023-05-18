@@ -279,6 +279,33 @@ input IntFilter {
   notIn: [Int!]
 }
 
+input IntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
+input IntNullableWithAggregatesFilter {
+  _avg: NestedFloatNullableFilter
+  _count: NestedIntNullableFilter
+  _max: NestedIntNullableFilter
+  _min: NestedIntNullableFilter
+  _sum: NestedIntNullableFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableWithAggregatesFilter
+  notIn: [Int!]
+}
+
 input IntWithAggregatesFilter {
   _avg: NestedFloatFilter
   _count: NestedIntFilter
@@ -352,6 +379,17 @@ input NestedFloatFilter {
   notIn: [Float!]
 }
 
+input NestedFloatNullableFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatNullableFilter
+  notIn: [Float!]
+}
+
 input NestedIntFilter {
   equals: Int
   gt: Int
@@ -371,6 +409,22 @@ input NestedIntNullableFilter {
   lt: Int
   lte: Int
   not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
+input NestedIntNullableWithAggregatesFilter {
+  _avg: NestedFloatNullableFilter
+  _count: NestedIntNullableFilter
+  _max: NestedIntNullableFilter
+  _min: NestedIntNullableFilter
+  _sum: NestedIntNullableFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableWithAggregatesFilter
   notIn: [Int!]
 }
 
@@ -450,6 +504,14 @@ input NestedStringWithAggregatesFilter {
   not: NestedStringWithAggregatesFilter
   notIn: [String!]
   startsWith: String
+}
+
+input NullableIntFieldUpdateOperationsInput {
+  decrement: Int
+  divide: Int
+  increment: Int
+  multiply: Int
+  set: Int
 }
 
 input NullableStringFieldUpdateOperationsInput {
@@ -572,6 +634,7 @@ type UserBook {
   bookId: Int!
   date: DateTime!
   id: Int!
+  rating: Int
   status: String!
   user: User!
   userId: Int!
@@ -580,12 +643,14 @@ type UserBook {
 type UserBookAvgAggregate {
   bookId: Float
   id: Float
+  rating: Float
   userId: Float
 }
 
 input UserBookAvgOrderByAggregateInput {
   bookId: SortOrder
   id: SortOrder
+  rating: SortOrder
   userId: SortOrder
 }
 
@@ -594,6 +659,7 @@ type UserBookCountAggregate {
   bookId: Int!
   date: Int!
   id: Int!
+  rating: Int!
   status: Int!
   userId: Int!
 }
@@ -602,6 +668,7 @@ input UserBookCountOrderByAggregateInput {
   bookId: SortOrder
   date: SortOrder
   id: SortOrder
+  rating: SortOrder
   status: SortOrder
   userId: SortOrder
 }
@@ -609,6 +676,7 @@ input UserBookCountOrderByAggregateInput {
 input UserBookCreateInput {
   book: BookCreateNestedOneWithoutUsersInput!
   date: DateTime!
+  rating: Int
   status: String!
   user: UserCreateNestedOneWithoutBooksInput!
 }
@@ -637,6 +705,7 @@ input UserBookCreateOrConnectWithoutUserInput {
 
 input UserBookCreateWithoutBookInput {
   date: DateTime!
+  rating: Int
   status: String!
   user: UserCreateNestedOneWithoutBooksInput!
 }
@@ -644,6 +713,7 @@ input UserBookCreateWithoutBookInput {
 input UserBookCreateWithoutUserInput {
   book: BookCreateNestedOneWithoutUsersInput!
   date: DateTime!
+  rating: Int
   status: String!
 }
 
@@ -656,6 +726,7 @@ type UserBookGroupBy {
   bookId: Int!
   date: DateTime!
   id: Int!
+  rating: Int
   status: String!
   userId: Int!
 }
@@ -670,6 +741,7 @@ type UserBookMaxAggregate {
   bookId: Int
   date: DateTime
   id: Int
+  rating: Int
   status: String
   userId: Int
 }
@@ -678,6 +750,7 @@ input UserBookMaxOrderByAggregateInput {
   bookId: SortOrder
   date: SortOrder
   id: SortOrder
+  rating: SortOrder
   status: SortOrder
   userId: SortOrder
 }
@@ -686,6 +759,7 @@ type UserBookMinAggregate {
   bookId: Int
   date: DateTime
   id: Int
+  rating: Int
   status: String
   userId: Int
 }
@@ -694,6 +768,7 @@ input UserBookMinOrderByAggregateInput {
   bookId: SortOrder
   date: SortOrder
   id: SortOrder
+  rating: SortOrder
   status: SortOrder
   userId: SortOrder
 }
@@ -711,6 +786,7 @@ input UserBookOrderByWithAggregationInput {
   bookId: SortOrder
   date: SortOrder
   id: SortOrder
+  rating: SortOrder
   status: SortOrder
   userId: SortOrder
 }
@@ -720,6 +796,7 @@ input UserBookOrderByWithRelationInput {
   bookId: SortOrder
   date: SortOrder
   id: SortOrder
+  rating: SortOrder
   status: SortOrder
   user: UserOrderByWithRelationInput
   userId: SortOrder
@@ -729,6 +806,7 @@ enum UserBookScalarFieldEnum {
   bookId
   date
   id
+  rating
   status
   userId
 }
@@ -740,6 +818,7 @@ input UserBookScalarWhereInput {
   bookId: IntFilter
   date: DateTimeFilter
   id: IntFilter
+  rating: IntNullableFilter
   status: StringFilter
   userId: IntFilter
 }
@@ -751,6 +830,7 @@ input UserBookScalarWhereWithAggregatesInput {
   bookId: IntWithAggregatesFilter
   date: DateTimeWithAggregatesFilter
   id: IntWithAggregatesFilter
+  rating: IntNullableWithAggregatesFilter
   status: StringWithAggregatesFilter
   userId: IntWithAggregatesFilter
 }
@@ -758,24 +838,28 @@ input UserBookScalarWhereWithAggregatesInput {
 type UserBookSumAggregate {
   bookId: Int
   id: Int
+  rating: Int
   userId: Int
 }
 
 input UserBookSumOrderByAggregateInput {
   bookId: SortOrder
   id: SortOrder
+  rating: SortOrder
   userId: SortOrder
 }
 
 input UserBookUpdateInput {
   book: BookUpdateOneRequiredWithoutUsersNestedInput
   date: DateTimeFieldUpdateOperationsInput
+  rating: NullableIntFieldUpdateOperationsInput
   status: StringFieldUpdateOperationsInput
   user: UserUpdateOneRequiredWithoutBooksNestedInput
 }
 
 input UserBookUpdateManyMutationInput {
   date: DateTimeFieldUpdateOperationsInput
+  rating: NullableIntFieldUpdateOperationsInput
   status: StringFieldUpdateOperationsInput
 }
 
@@ -827,6 +911,7 @@ input UserBookUpdateWithWhereUniqueWithoutUserInput {
 
 input UserBookUpdateWithoutBookInput {
   date: DateTimeFieldUpdateOperationsInput
+  rating: NullableIntFieldUpdateOperationsInput
   status: StringFieldUpdateOperationsInput
   user: UserUpdateOneRequiredWithoutBooksNestedInput
 }
@@ -834,6 +919,7 @@ input UserBookUpdateWithoutBookInput {
 input UserBookUpdateWithoutUserInput {
   book: BookUpdateOneRequiredWithoutUsersNestedInput
   date: DateTimeFieldUpdateOperationsInput
+  rating: NullableIntFieldUpdateOperationsInput
   status: StringFieldUpdateOperationsInput
 }
 
@@ -862,6 +948,7 @@ input UserBookWhereInput {
   bookId: IntFilter
   date: DateTimeFilter
   id: IntFilter
+  rating: IntNullableFilter
   status: StringFilter
   user: UserRelationFilter
   userId: IntFilter

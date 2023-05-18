@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { ColumnDef, ColumnFilter, SortingState, ColumnFiltersState } from "@tanstack/react-table";
+import { useState, useMemo, useCallback } from "react";
+import { Rating } from "react-simple-star-rating";
+import { ColumnDef, SortingState, ColumnFiltersState } from "@tanstack/react-table";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import set from "lodash.set";
 
@@ -11,7 +12,8 @@ import {
 
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import DataTable from "./data-table";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
+import { DataTable } from "./data-table";
 
 import { useUserBooks } from "~/hooks/user-books";
 
@@ -111,21 +113,70 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "WANT_TO_READ" }
     return acc;
   }, {}) as UserBookWhereInput;
 
-  const { books, loading, loadNext, loadPrev } = useUserBooks({
+  const { books, loading, finisheBook, loadNext, loadPrev } = useUserBooks({
     userId: 5,
     order,
     where,
     status: opts.status,
   });
 
+  const [finishBookId, setFinishBookId] = useState<UserBook["id"] | null>(null);
+  const onFinish = (bookId: UserBook["id"]) => {
+    setFinishBookId(bookId);
+  };
+
+  const tableColumns = useMemo(() => {
+    if (opts.status === "READ") return columns;
+    return columns.concat({
+      header: "Actions",
+      cell: ({ row }) => {
+        return (
+          <Button size="sm" onClick={() => onFinish(row.original.id)}>
+            Finish
+          </Button>
+        );
+      },
+    });
+  }, [opts.status]);
+
+  const [rating, setRating] = useState<number>(0);
+  const handleFinish = useCallback(() => {
+    if (!finishBookId) return;
+    finisheBook(finishBookId, rating).then(() => setFinishBookId(null));
+  }, [rating, finishBookId, finisheBook]);
+
+  const onClose = useCallback(() => {
+    setFinishBookId(null);
+  }, []);
+
   return (
-    <DataTable
-      columns={columns}
-      data={books}
-      onFiltering={setFilteringState}
-      onSorting={setSortingState}
-      onNextPage={loadNext}
-      onPrevPage={loadPrev}
-    />
+    <>
+      {!!finishBookId && (
+        <Dialog open onOpenChange={onClose}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Rate</DialogTitle>
+            </DialogHeader>
+            <Rating onClick={setRating} />
+            <DialogFooter>
+              <Button variant="secondary" size="sm" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit" size="sm" onClick={handleFinish}>
+                Ok
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+      <DataTable
+        columns={tableColumns}
+        data={books}
+        onFiltering={setFilteringState}
+        onSorting={setSortingState}
+        onNextPage={loadNext}
+        onPrevPage={loadPrev}
+      />
+    </>
   );
 };
