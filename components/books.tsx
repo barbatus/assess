@@ -1,8 +1,9 @@
 import { useState, useMemo, useCallback } from "react";
+import set from "lodash.set";
 import { Rating } from "react-simple-star-rating";
 import { ColumnDef, SortingState, ColumnFiltersState } from "@tanstack/react-table";
 import { ArrowUp, ArrowDown } from "lucide-react";
-import set from "lodash.set";
+import { useRouter } from "next/router";
 
 import {
   UserBook,
@@ -10,12 +11,12 @@ import {
   UserBookWhereInput,
 } from "~/prisma/generated/type-graphql";
 
+import { useUserBooks } from "~/hooks/user-books";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { DataTable } from "./data-table";
-
-import { useUserBooks } from "~/hooks/user-books";
 
 export const columns: ColumnDef<UserBook>[] = [
   {
@@ -62,7 +63,7 @@ export const columns: ColumnDef<UserBook>[] = [
   {
     accessorKey: "book.author",
     header: "Author",
-    meta: { className: "hidden sm:table-cell" },
+    meta: { className: "hidden sm:table-cell capitalize" },
   },
   {
     accessorKey: "date",
@@ -90,9 +91,10 @@ export const columns: ColumnDef<UserBook>[] = [
   },
 ];
 
-export const BooksTable = (opts: { status: "READ" | "READING" | "WANT_TO_READ" }) => {
+export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => {
   const [sortingState, setSortingState] = useState<SortingState>([]);
   const [filteringState, setFilteringState] = useState<ColumnFiltersState>([]);
+  const router = useRouter();
 
   const order = sortingState.map((sort) => {
     return set<UserBookOrderByWithRelationInput>(
@@ -113,8 +115,8 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "WANT_TO_READ" }
     return acc;
   }, {}) as UserBookWhereInput;
 
-  const { books, loading, finisheBook, loadNext, loadPrev } = useUserBooks({
-    userId: 5,
+  const { books, loading, finishBook, loadNext, loadPrev } = useUserBooks({
+    userId: 1,
     order,
     where,
     status: opts.status,
@@ -140,10 +142,6 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "WANT_TO_READ" }
   }, [opts.status]);
 
   const [rating, setRating] = useState<number>(0);
-  const handleFinish = useCallback(() => {
-    if (!finishBookId) return;
-    finisheBook(finishBookId, rating).then(() => setFinishBookId(null));
-  }, [rating, finishBookId, finisheBook]);
 
   const onClose = useCallback(() => {
     setFinishBookId(null);
@@ -162,7 +160,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "WANT_TO_READ" }
               <Button variant="secondary" size="sm" onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit" size="sm" onClick={handleFinish}>
+              <Button type="submit" size="sm">
                 Ok
               </Button>
             </DialogFooter>
@@ -172,6 +170,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "WANT_TO_READ" }
       <DataTable
         columns={tableColumns}
         data={books}
+        onAdd={() => router.push("add")}
         onFiltering={setFilteringState}
         onSorting={setSortingState}
         onNextPage={loadNext}

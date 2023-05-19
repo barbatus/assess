@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { PlusIcon } from "lucide-react";
+
 import {
   ColumnDef,
   flexRender,
@@ -23,6 +25,7 @@ import { Button } from "~/components/ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onAdd: () => void;
   onSorting: (sorting: SortingState) => void;
   onFiltering: (columnFilters: ColumnFiltersState) => void;
   onNextPage: () => void;
@@ -38,6 +41,7 @@ declare module "@tanstack/table-core" {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onAdd,
   onFiltering,
   onSorting,
   onNextPage,
@@ -110,13 +114,18 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button variant="outline" size="sm" onClick={onPrevPage}>
-          Previous
+      <div className="flex items-center justify-between py-4">
+        <Button variant="fab" className="w-10 p-3">
+          <PlusIcon className="h-6 w-6" onClick={onAdd} />
         </Button>
-        <Button variant="outline" size="sm" onClick={onNextPage}>
-          Next
-        </Button>
+        <div className="space-x-2">
+          <Button variant="outline" size="sm" onClick={onPrevPage}>
+            Previous
+          </Button>
+          <Button variant="outline" size="sm" onClick={onNextPage}>
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

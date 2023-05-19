@@ -2,6 +2,7 @@ query GetUserBooks($where: UserBookWhereInput, $order: [UserBookOrderByWithRelat
   userBooks(where: $where, orderBy: $order, skip: $offset, take: $pageSize) {
     id
     date
+    status
     book {
       id
       title
@@ -14,6 +15,20 @@ mutation UpdateUserBook($data: UserBookUpdateInput!, $where: UserBookWhereUnique
   updateOneUserBook(data: $data, where: $where) {
     id
     date
+    status
+    book {
+      id
+      title
+      author
+    }
+  }
+}
+
+mutation AddUserBook($data: UserBookCreateInput!) {
+  createOneUserBook(data: $data) {
+    id
+    date
+    status
     book {
       id
       title

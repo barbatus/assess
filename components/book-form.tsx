@@ -15,14 +15,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
+import { useUserBook } from "~/hooks/user-book";
+import { UserBook } from "~/prisma/generated/type-graphql";
+
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   author: z.string().min(1, { message: "Author is required" }),
   date: z.date({ required_error: "Date is required" }),
-  status: z.string({ required_error: "Status is required" }),
+  status: z.enum(["READ", "READING", "TO_READ"], { required_error: "Status is required" }),
 });
 
-export const BookForm = () => {
+export const BookForm = (props: { onBookAdded: (book: UserBook) => void }) => {
   const {
     register,
     formState: { errors, isValid },
@@ -33,14 +36,20 @@ export const BookForm = () => {
     defaultValues: {},
   });
 
-  console.log(errors);
+  const { addBook, adding } = useUserBook({ userId: 1 });
 
-  const onSubmitHandler = useCallback(() => {
-
-  }, []);
+  const onSubmitHandler = useCallback(
+    async (values: TypeOf<typeof formSchema>) => {
+      const newBook = await addBook(values);
+      if (newBook) {
+        props.onBookAdded(newBook);
+      }
+    },
+    [props.onBookAdded],
+  );
 
   return (
-    <div className="grid gap-4 gap-y-5 py-4 mx-auto max-w-md">
+    <div className="grid gap-4 gap-y-5 py-2 max-w-md mx-auto">
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="name" className="text-right">
           Title
@@ -108,8 +117,13 @@ export const BookForm = () => {
         />
       </div>
       <div className="grid grid-cols-4 gap-4">
-        <Button size="sm" className="col-start-4" onClick={handleSubmit(onSubmitHandler)}>
-          Save
+        <Button
+          size="sm"
+          loading={adding}
+          className="col-start-4"
+          onClick={handleSubmit(onSubmitHandler)}
+        >
+          Add
         </Button>
       </div>
     </div>

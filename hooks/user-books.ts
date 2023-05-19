@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { GetUserBooks, UpdateUserBook } from '~/graphql/queries.graphql';
@@ -11,7 +11,7 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
   const variables = {
     offset: page * 10,
     pageSize: 10,
-    where: { userId: { equals: 1 }, status: { equals: opts.status }, ...opts.where },
+    where: { userId: { equals: opts.userId }, status: { equals: opts.status }, ...opts.where },
     order: opts.order,
   };
   const { data, loading, error } = useQuery<{ userBooks: UserBook[] }>(GetUserBooks, {
@@ -19,7 +19,7 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
     variables,
   });
 
-  const [mutate] = useMutation(UpdateUserBook, {
+  const [finishMutate] = useMutation(UpdateUserBook, {
     update(cache, { data: { updateOneUserBook } }) {
       cache.updateQuery({ query: GetUserBooks, variables }, (data) => {
         return {
@@ -39,12 +39,11 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
     setPage(page => Math.max(0, page - 1));
   }, [loading]);
 
-  const finisheBook = useCallback((userBookId: UserBook['id'], rating: number) => {
-    return mutate({
+  const finishBook = useCallback((userBookId: UserBook['id'], rating: number) => {
+    return finishMutate({
       variables: {
         data: {
           status: { set: 'READ' },
-          date: { set: new Date() },
           rating: { set: rating },
         },
         where: {
@@ -52,7 +51,7 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
         },
       },
     });
-  }, [mutate]);
+  }, [finishMutate]);
 
   return {
     books: data?.userBooks || [], 
@@ -60,6 +59,6 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
     error,
     loadNext,
     loadPrev,
-    finisheBook,
+    finishBook,
   };
 }

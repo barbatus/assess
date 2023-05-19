@@ -42,7 +42,7 @@ export default function Home() {
         <BooksTable status="READING" />
       </TabsContent>
       <TabsContent value="wantToRead" className="w-full">
-        <BooksTable status="WANT_TO_READ" />
+        <BooksTable status="TO_READ" />
       </TabsContent>
     </Tabs>
   );

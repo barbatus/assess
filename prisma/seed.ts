@@ -20,8 +20,8 @@ async function main() {
     await prisma.book.create({
       data: {
         id: i,
-        title: faker.word.words({ count: { min: 1, max: 3 } }),
-        author: faker.person.fullName(),
+        title: faker.word.words({ count: { min: 1, max: 3 } }).toLowerCase(),
+        author: faker.person.fullName().toLowerCase(),
       },
     });
   }
@@ -33,7 +33,7 @@ async function main() {
       create: {
         userId,
         bookId,
-        status: faker.helpers.arrayElement(["READ", "READING", "WANT_TO_READ"]),
+        status: faker.helpers.arrayElement(["READ", "READING", "TO_READ"]),
         date: faker.date.past(),
       },
       update: {},
