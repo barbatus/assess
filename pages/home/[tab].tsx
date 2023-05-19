@@ -1,3 +1,6 @@
+import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 import { getServerApolloClient } from "~/graphql/client";
@@ -5,7 +8,8 @@ import { BooksTable } from "~/components/books";
 
 import { GetUserBooks } from "~/graphql/queries.graphql";
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const tab  = query.tab as string;
   const apolloClient = getServerApolloClient();
 
   await apolloClient.query({
@@ -13,7 +17,7 @@ export const getServerSideProps = async () => {
     variables: {
       offset: 0,
       pageSize: 10,
-      where: { userId: { equals: 1 }, status: { equals: "READ" } },
+      where: { userId: { equals: 1 }, status: { equals: tab } },
       order: [{ book: { title: "asc" } }],
     },
   });
@@ -28,12 +32,15 @@ export const getServerSideProps = async () => {
 };
 
 export default function Home() {
+  const router = useRouter();
+  const tab = router.query.tab as string;
+
   return (
-    <Tabs defaultValue="read" className="w-full">
+    <Tabs defaultValue={tab || 'read'} className="w-full">
       <TabsList className="grid grid-cols-3 sm:w-[400px]">
-        <TabsTrigger value="read">Read</TabsTrigger>
-        <TabsTrigger value="reading">Reading</TabsTrigger>
-        <TabsTrigger value="wantToRead">Want To Read</TabsTrigger>
+        <TabsTrigger value="read" onClick={() => router.push('./read')}>Read</TabsTrigger>
+        <TabsTrigger value="reading" onClick={() => router.push('./reading')}>Reading</TabsTrigger>
+        <TabsTrigger value="to_read" onClick={() => router.push('./to_read')}>Want To Read</TabsTrigger>
       </TabsList>
       <TabsContent value="read" className="w-full">
         <BooksTable status="READ" />
@@ -41,7 +48,7 @@ export default function Home() {
       <TabsContent value="reading" className="w-full">
         <BooksTable status="READING" />
       </TabsContent>
-      <TabsContent value="wantToRead" className="w-full">
+      <TabsContent value="to_read" className="w-full">
         <BooksTable status="TO_READ" />
       </TabsContent>
     </Tabs>

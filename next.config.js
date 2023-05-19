@@ -14,6 +14,15 @@ const nextConfig = {
     });
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/home/read',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 module.exports = nextConfig;
