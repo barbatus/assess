@@ -113,7 +113,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
     return acc;
   }, {}) as UserBookWhereInput;
 
-  const { books, loading, finishBook, loadNext, loadPrev } = useUserBooks({
+  const { books, loading, loadNext, loadPrev } = useUserBooks({
     userId: 1,
     order,
     where,

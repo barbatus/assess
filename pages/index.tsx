@@ -30,7 +30,7 @@ export const getServerSideProps = async () => {
 export default function Home() {
   return (
     <Tabs defaultValue="read" className="w-full">
-      <TabsList className="grid grid-cols-3 w-[400px]">
+      <TabsList className="grid grid-cols-3 sm:w-[400px]">
         <TabsTrigger value="read">Read</TabsTrigger>
         <TabsTrigger value="reading">Reading</TabsTrigger>
         <TabsTrigger value="wantToRead">Want To Read</TabsTrigger>

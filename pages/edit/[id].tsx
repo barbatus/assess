@@ -80,10 +80,10 @@ export default function Edit() {
           </DialogContent>
         </Dialog>
       )}
-      <div className="grid grid-cols-4 items-center max-w-md mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-4 items-center max-w-md mx-auto mb-2">
         <Button
           variant="ghost"
-          className="col-start-1 w-fit ml-auto"
+          className="col-start-1 w-fit sm:ml-auto -ml-4"
           onClick={() => router.push("/")}
         >
           <ArrowLeft className="h-6 w-6" />

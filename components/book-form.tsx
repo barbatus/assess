@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -26,6 +26,14 @@ const formSchema = z.object({
 });
 
 type FormInput = TypeOf<typeof formSchema>;
+
+const FormRow = (props: { children: ReactNode }) => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+      {props.children}
+    </div>
+  );
+}
 
 export const BookForm = (props: {
   initialData?: Partial<UserBook>;
@@ -60,20 +68,20 @@ export const BookForm = (props: {
 
   return (
     <div className="grid gap-4 gap-y-5 py-2 max-w-md mx-auto">
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="name" className="text-right">
+      <FormRow>
+        <Label htmlFor="name" className="sm:text-right font-bold">
           Title
         </Label>
         <Input id="title" className="col-span-3 capitalize" {...register("title")} />
-      </div>
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="author" className="text-right">
+      </FormRow>
+      <FormRow>
+        <Label htmlFor="author" className="sm:text-right font-bold">
           Author
         </Label>
         <Input id="author" className="col-span-3 capitalize" {...register("author")} />
-      </div>
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="date" className="text-right">
+      </FormRow>
+      <FormRow>
+        <Label htmlFor="date" className="sm:text-right font-bold">
           Date
         </Label>
         <Controller
@@ -104,9 +112,9 @@ export const BookForm = (props: {
             </Popover>
           )}
         />
-      </div>
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="username" className="text-right">
+      </FormRow>
+      <FormRow>
+        <Label htmlFor="username" className="sm:text-right font-bold">
           Status
         </Label>
         <Controller
@@ -125,12 +133,12 @@ export const BookForm = (props: {
             </Select>
           )}
         />
-      </div>
-      <div className="grid grid-cols-4 gap-4">
+      </FormRow>
+      <div className="flex justify-end">
         <Button
           size="sm"
+          className="w-full sm:w-auto"
           loading={loading}
-          className="col-start-4"
           onClick={handleSubmit(onSubmitHandler)}
         >
           {props.initialData?.id ? "Save" : "Add"}
