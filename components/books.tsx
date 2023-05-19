@@ -1,8 +1,7 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import set from "lodash.set";
-import { Rating } from "react-simple-star-rating";
 import { ColumnDef, SortingState, ColumnFiltersState } from "@tanstack/react-table";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, EyeIcon } from "lucide-react";
 import { useRouter } from "next/router";
 
 import {
@@ -15,7 +14,6 @@ import { useUserBooks } from "~/hooks/user-books";
 
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { DataTable } from "./data-table";
 
 export const columns: ColumnDef<UserBook>[] = [
@@ -122,51 +120,21 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
     status: opts.status,
   });
 
-  const [finishBookId, setFinishBookId] = useState<UserBook["id"] | null>(null);
-  const onFinish = (bookId: UserBook["id"]) => {
-    setFinishBookId(bookId);
-  };
-
   const tableColumns = useMemo(() => {
-    if (opts.status === "READ") return columns;
     return columns.concat({
       header: "Actions",
       cell: ({ row }) => {
         return (
-          <Button size="sm" onClick={() => onFinish(row.original.id)}>
-            Finish
+          <Button size="sm" variant="ghost" onClick={() => router.push(`/edit/${row.original.id}`)}>
+            <EyeIcon className="w-5" />
           </Button>
         );
       },
     });
   }, [opts.status]);
 
-  const [rating, setRating] = useState<number>(0);
-
-  const onClose = useCallback(() => {
-    setFinishBookId(null);
-  }, []);
-
   return (
     <>
-      {!!finishBookId && (
-        <Dialog open onOpenChange={onClose}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Rate</DialogTitle>
-            </DialogHeader>
-            <Rating onClick={setRating} />
-            <DialogFooter>
-              <Button variant="secondary" size="sm" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button type="submit" size="sm">
-                Ok
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
       <DataTable
         columns={tableColumns}
         data={books}

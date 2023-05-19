@@ -17,7 +17,7 @@ export default function Create() {
           <ArrowLeft className="h-6 w-6" />
         </Button>
       </div>
-      <BookForm onBookAdded={() => router.push("/")} />
+      <BookForm onDone={() => router.push("/")} />
     </div>
   );
 }

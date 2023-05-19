@@ -25,7 +25,7 @@ const formSchema = z.object({
   status: z.enum(["READ", "READING", "TO_READ"], { required_error: "Status is required" }),
 });
 
-export const BookForm = (props: { onBookAdded: (book: UserBook) => void }) => {
+export const BookForm = (props: { onDone: (book: UserBook) => void }) => {
   const {
     register,
     formState: { errors, isValid },
@@ -42,10 +42,10 @@ export const BookForm = (props: { onBookAdded: (book: UserBook) => void }) => {
     async (values: TypeOf<typeof formSchema>) => {
       const newBook = await addBook(values);
       if (newBook) {
-        props.onBookAdded(newBook);
+        props.onDone(newBook);
       }
     },
-    [props.onBookAdded],
+    [props.onDone],
   );
 
   return (
