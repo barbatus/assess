@@ -1,38 +1,47 @@
+fragment UserBookData on UserBook {
+  id
+  date
+  status
+}
+
+fragment BookData on Book {
+  id
+  title
+  author
+}
+
 query GetUserBooks($where: UserBookWhereInput, $order: [UserBookOrderByWithRelationInput!], $offset: Int, $pageSize: Int) {
   userBooks(where: $where, orderBy: $order, skip: $offset, take: $pageSize) {
-    id
-    date
-    status
+    ...UserBookData
     book {
-      id
-      title
-      author
+      ...BookData
     }
   }
 }
 
 mutation UpdateUserBook($data: UserBookUpdateInput!, $where: UserBookWhereUniqueInput!) {
   updateOneUserBook(data: $data, where: $where) {
-    id
-    date
-    status
+    ...UserBookData
     book {
-      id
-      title
-      author
+      ...BookData
     }
   }
 }
 
 mutation AddUserBook($data: UserBookCreateInput!) {
   createOneUserBook(data: $data) {
-    id
-    date
-    status
+    ...UserBookData
     book {
-      id
-      title
-      author
+      ...BookData
+    }
+  }
+}
+
+query GetUserBook($where: UserBookWhereUniqueInput!) {
+  userBook(where: $where) {
+    ...UserBookData
+    book {
+      ...BookData
     }
   }
 }

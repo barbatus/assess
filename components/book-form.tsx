@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
-import { useUserBook } from "~/hooks/user-book";
+import { UserBookInput } from "~/hooks/user-book";
 import { UserBook } from "~/prisma/generated/type-graphql";
 
 const formSchema = z.object({
@@ -25,25 +25,35 @@ const formSchema = z.object({
   status: z.enum(["READ", "READING", "TO_READ"], { required_error: "Status is required" }),
 });
 
-export const BookForm = (props: { onDone: (book: UserBook) => void }) => {
+type FormInput = TypeOf<typeof formSchema>;
+
+export const BookForm = (props: {
+  initialData?: Partial<UserBook>;
+  onDone: (book: UserBookInput) => Promise<unknown>;
+}) => {
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
     control,
-  } = useForm<TypeOf<typeof formSchema>>({
+    reset,
+  } = useForm<FormInput>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
   });
 
-  const { addBook, adding } = useUserBook({ userId: 1 });
+  useEffect(() => {
+    reset({
+      title: props.initialData?.book?.title ?? "",
+      author: props.initialData?.book?.author ?? "",
+      status: props.initialData?.status as FormInput["status"],
+      date: props.initialData?.date ? new Date(props.initialData.date) : undefined,
+    });
+  }, [props.initialData]);
 
+  const [loading, setLoading] = useState(false);
   const onSubmitHandler = useCallback(
     async (values: TypeOf<typeof formSchema>) => {
-      const newBook = await addBook(values);
-      if (newBook) {
-        props.onDone(newBook);
-      }
+      props.onDone(values).finally(() => setLoading(false));
     },
     [props.onDone],
   );
@@ -54,13 +64,13 @@ export const BookForm = (props: { onDone: (book: UserBook) => void }) => {
         <Label htmlFor="name" className="text-right">
           Title
         </Label>
-        <Input id="title" className="col-span-3" {...register("title")} />
+        <Input id="title" className="col-span-3 capitalize" {...register("title")} />
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="author" className="text-right">
           Author
         </Label>
-        <Input id="author" className="col-span-3" {...register("author")} />
+        <Input id="author" className="col-span-3 capitalize" {...register("author")} />
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="date" className="text-right">
@@ -119,11 +129,11 @@ export const BookForm = (props: { onDone: (book: UserBook) => void }) => {
       <div className="grid grid-cols-4 gap-4">
         <Button
           size="sm"
-          loading={adding}
+          loading={loading}
           className="col-start-4"
           onClick={handleSubmit(onSubmitHandler)}
         >
-          Add
+          {props.initialData?.id ? "Save" : "Add"}
         </Button>
       </div>
     </div>

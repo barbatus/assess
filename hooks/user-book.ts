@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
-import { UpdateUserBook, AddUserBook } from '~/graphql/queries.graphql';
+import { UpdateUserBook, AddUserBook, GetUserBook } from '~/graphql/queries.graphql';
 
 import { UserBook, User } from '~/prisma/generated/type-graphql';
 
@@ -13,10 +13,18 @@ export type UserBookInput = {
 }
 
 export const useUserBook = (opts: { id?: UserBook['id'], userId: User['id'] }) => {
-  const [finishMutate] = useMutation(UpdateUserBook);
+  const variables = {
+    where: { id: opts.id },
+    skip: !opts.id,
+  };
+  const { data, loading, error } = useQuery<{ userBook: UserBook }>(GetUserBook, {
+    variables,
+  });
+
+  const [updateMutate] = useMutation(UpdateUserBook);
 
   const finishBook = useCallback((rating: number) => {
-    return finishMutate({
+    return updateMutate({
       variables: {
         data: {
           status: { set: 'READ' },
@@ -27,7 +35,26 @@ export const useUserBook = (opts: { id?: UserBook['id'], userId: User['id'] }) =
         },
       },
     })
-  }, [finishMutate]);
+  }, [updateMutate]);
+
+  const updateBook = useCallback((input: UserBookInput) => {
+    return updateMutate({
+      variables: {
+        data: {
+          book: {
+            update: {
+              title: { set: input.title.toLowerCase() },
+              author: { set: input.author.toLowerCase() },
+            },
+          },
+          status: { set: input.status },
+        },
+        where: {
+          id: opts.id,
+        },
+      },
+    })
+  }, [updateMutate]);
 
   const [addMutate, { loading: adding }] = useMutation<UserBook>(AddUserBook);
 
@@ -53,6 +80,10 @@ export const useUserBook = (opts: { id?: UserBook['id'], userId: User['id'] }) =
   return {
     finishBook,
     addBook,
+    updateBook,
     adding,
+    book: data?.userBook,
+    loading,
+    error,
   };
 }

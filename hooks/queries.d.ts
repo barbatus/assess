@@ -3,8 +3,8 @@ declare module "*.graphql" {
   import { DocumentNode } from 'graphql';
   const GetUserBooks: DocumentNode;
   const UpdateUserBook: DocumentNode;
-  const UpdateOrCreateUserBook: DocumentNode;
   const AddUserBook: DocumentNode;
+  const GetUserBook: DocumentNode;
 
-  export { GetUserBooks, UpdateUserBook, UpdateOrCreateUserBoo, AddUserBook };
+  export { GetUserBooks, UpdateUserBook, AddUserBook, GetUserBook };
 }
