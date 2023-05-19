@@ -12,10 +12,10 @@ export type UserBookInput = {
   status: 'READ' | 'READING' | 'TO_READ';
 }
 
-export const useUserBook = (opts: { id?: UserBook['id'], userId: User['id'] }) => {
+export const useUserBook = (opts: { id?: UserBook['id'], userId?: User['id'] }) => {
   const variables = {
     where: { id: opts.id },
-    skip: !opts.id,
+    skip: !opts.id
   };
   const { data, loading, error } = useQuery<{ userBook: UserBook }>(GetUserBook, {
     variables,

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { InMemoryCache, ApolloClient, NormalizedCacheObject, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -38,13 +39,22 @@ export function useApollo({ initialCache }: { initialCache: NormalizedCacheObjec
   return useMemo(() => getOrCreateApolloClient({ initialCache }), [initialCache]);
 }
 
-export const getServerApolloClient = () => {
+export const getServerApolloClient = (token?: string) => {
+  const authLink = setContext((_, { headers }) => {
+    return {
+      headers: {
+        ...headers,
+        authorization: token,
+      }
+    }
+  });
+
   return new ApolloClient<NormalizedCacheObject>({
     cache,
     ssrMode: true,
-    link: createHttpLink({
+    link: authLink.concat(createHttpLink({
       uri: 'http://localhost:3000/api/graphql',
       credentials: 'same-origin',
-    }),
+    })),
   });
 }

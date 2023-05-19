@@ -15,12 +15,17 @@ import {
 } from "~/components/ui/dialog";
 
 import { useUserBook, UserBookInput } from "~/hooks/user-book";
+import { useAuth } from "~/hooks/auth";
 
 import { getServerApolloClient } from "~/graphql/client";
 import { GetUserBook } from "~/graphql/queries.graphql";
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const apolloClient = getServerApolloClient();
+import { getUser } from "../../middleware";
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+  const apolloClient = getServerApolloClient(req.cookies["authToken"]);
+
+  const user = await getUser(req);
 
   await apolloClient.query({
     query: GetUserBook,
@@ -34,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
     props: {
       apolloCache,
+      initialUser: user,
     },
   };
 };
@@ -42,8 +48,12 @@ export default function Edit() {
   const router = useRouter();
   const [showRate, setShowRate] = useState(false);
   const [rating, setRating] = useState<number>(0);
+  const { user } = useAuth();
 
-  const { book, finishBook, updateBook } = useUserBook({ userId: 1, id: Number(router.query.id) });
+  const { book, finishBook, updateBook } = useUserBook({
+    userId: user!.id,
+    id: Number(router.query.id),
+  });
 
   const onFinish = useCallback(() => {
     finishBook(rating);

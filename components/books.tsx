@@ -11,6 +11,7 @@ import {
 } from "~/prisma/generated/type-graphql";
 
 import { useUserBooks } from "~/hooks/user-books";
+import { useAuth } from "~/hooks/auth";
 
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -113,8 +114,10 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
     return acc;
   }, {}) as UserBookWhereInput;
 
+  const { user } = useAuth();
+
   const { books, loading, loadNext, loadPrev } = useUserBooks({
-    userId: 1,
+    userId: user!.id,
     order,
     where,
     status: opts.status,

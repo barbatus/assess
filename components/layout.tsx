@@ -15,7 +15,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center justify-end">Navbar</div>
         </div>
       </nav>
-      <div className="pt-16 flex-1 container max-sm:pl-1 max-sm:pr-1 max-w-5xl mx-auto">{children}</div>
+      <div className="pt-16 flex-1 container max-sm:pl-1 max-sm:pr-1 max-w-5xl mx-auto">
+        {children}
+      </div>
     </main>
   );
 }

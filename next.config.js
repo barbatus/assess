@@ -17,11 +17,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/home/read',
+        source: "/",
+        destination: "/home/read",
         permanent: true,
       },
-    ]
+    ];
   },
 };
 

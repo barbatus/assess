@@ -33,7 +33,7 @@ const FormRow = (props: { children: ReactNode }) => {
       {props.children}
     </div>
   );
-}
+};
 
 export const BookForm = (props: {
   initialData?: Partial<UserBook>;

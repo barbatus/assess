@@ -6,11 +6,13 @@ import { BookForm } from "~/components/book-form";
 import { Button } from "~/components/ui/button";
 
 import { useUserBook, UserBookInput } from "~/hooks/user-book";
+import { useAuth } from "~/hooks/auth";
 
 export default function Create() {
   const router = useRouter();
+  const { user } = useAuth();
 
-  const { addBook } = useUserBook({ userId: 1 });
+  const { addBook } = useUserBook({ userId: user?.id });
 
   const onAdd = useCallback(
     (data: UserBookInput) => {

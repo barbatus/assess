@@ -5,7 +5,7 @@ import { GetUserBooks, UpdateUserBook } from '~/graphql/queries.graphql';
 
 import { UserBook, User, UserBookOrderByWithRelationInput, UserBookWhereInput } from '~/prisma/generated/type-graphql';
 
-export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByWithRelationInput[], where: UserBookWhereInput, status: UserBook['status']  }) => {
+export const useUserBooks = (opts: { userId?: User['id'], order: UserBookOrderByWithRelationInput[], where: UserBookWhereInput, status: UserBook['status']  }) => {
   const [page, setPage] = useState(0);
 
   const variables = {
@@ -17,6 +17,7 @@ export const useUserBooks = (opts: { userId: User['id'], order: UserBookOrderByW
   const { data, loading, error } = useQuery<{ userBooks: UserBook[] }>(GetUserBooks, {
     fetchPolicy: 'cache-and-network',
     variables,
+    skip: !opts.userId,
   });
 
   const [finishMutate] = useMutation(UpdateUserBook, {
