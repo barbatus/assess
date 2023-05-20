@@ -93,6 +93,7 @@ const prisma = new PrismaClient();
 
 const apolloServer = new ApolloServer({
   schema,
+  persistedQueries: false,
   context: async ({ req }: { req: NextApiRequest }): Promise<Context> => {
     const token = req.cookies["authToken"] || req.headers.authorization || "";
     const user = (await verify(token, "secret")) as unknown as User;
@@ -130,6 +131,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       server: res.socket.server,
       path: "/api/graphql",
     });
+    /* eslint-disable  react-hooks/rules-of-hooks */
     graphqlWSS = useServer({ schema }, wsServer);
     await startServer;
     apolloHandler = apolloServer.createHandler({ path: "/api/graphql" });

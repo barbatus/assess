@@ -11,20 +11,24 @@ import { GetUserBooks } from "~/graphql/queries.graphql";
 import { getUser } from "../../middleware";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
-  const tab = query.tab as string;
+  const tab = query.tab as string | undefined;
   const apolloClient = getServerApolloClient(req.cookies["authToken"]);
 
   const user = await getUser(req);
 
-  await apolloClient.query({
-    query: GetUserBooks,
-    variables: {
-      offset: 0,
-      pageSize: 10,
-      where: { userId: { equals: user.id }, status: { equals: tab } },
-      order: [{ book: { title: "asc" } }],
-    },
-  });
+  try {
+    await apolloClient.query({
+      query: GetUserBooks,
+      variables: {
+        offset: 0,
+        pageSize: 10,
+        where: { userId: { equals: user.id }, status: { equals: tab?.toUpperCase() } },
+        order: [{ book: { title: "asc" } }],
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   const apolloCache = apolloClient.cache.extract();
 

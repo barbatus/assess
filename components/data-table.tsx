@@ -54,11 +54,11 @@ export function DataTable<TData, TValue>({
 
   useEffect(() => {
     onSorting(sorting);
-  }, [sorting]);
+  }, [onSorting, sorting]);
 
   useEffect(() => {
     onFiltering(columnFilters);
-  }, [columnFilters]);
+  }, [onFiltering, columnFilters]);
 
   const table = useReactTable({
     data,
@@ -117,8 +117,8 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between py-4">
-        <Button variant="fab" className="w-10 p-3 absolute max-sm:right-2 sm:relative">
-          <PlusIcon className="h-6 w-6" onClick={onAdd} />
+        <Button variant="fab" className="w-10 p-3 absolute max-sm:right-2 sm:relative" onClick={onAdd}>
+          <PlusIcon className="h-6 w-6" />
         </Button>
         <div className="space-x-2">
           <Button variant="outline" size="sm" onClick={onPrevPage}>

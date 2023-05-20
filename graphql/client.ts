@@ -73,7 +73,7 @@ export const getServerApolloClient = (token?: string) => {
     return {
       headers: {
         ...headers,
-        authorization: token,
+        cookie: token ? `authToken=${token}` : "",
       },
     };
   });
@@ -83,7 +83,7 @@ export const getServerApolloClient = (token?: string) => {
     ssrMode: true,
     link: authLink.concat(
       createHttpLink({
-        uri: "http://localhost:3000/api/graphql",
+        uri: "http://127.0.0.1:3000/api/graphql",
         credentials: "same-origin",
       }),
     ),
