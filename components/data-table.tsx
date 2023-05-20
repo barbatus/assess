@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Loader2 } from "lucide-react";
 
 import {
   ColumnDef,
@@ -25,6 +25,7 @@ import { Button } from "~/components/ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  loading: boolean;
   onAdd: () => void;
   onSorting: (sorting: SortingState) => void;
   onFiltering: (columnFilters: ColumnFiltersState) => void;
@@ -41,6 +42,7 @@ declare module "@tanstack/table-core" {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  loading,
   onAdd,
   onFiltering,
   onSorting,
@@ -75,7 +77,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <div className="relative">
       <div className="rounded-md sm:border">
         <Table>
           <TableHeader>
@@ -107,7 +109,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                  {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : "No results."}
                 </TableCell>
               </TableRow>
             )}

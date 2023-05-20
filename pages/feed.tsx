@@ -1,31 +1,22 @@
-import { useEffect, useState } from "react";
-
-import { useSubscription } from "@apollo/client";
-
-import { NewFinish } from "~/graphql/queries.graphql";
-
-import { FinishEventPayload } from "~/graphql/resolvers";
+import { useTranslation } from "react-i18next";
+import { useFeed } from "~/hooks/user-books";
 
 export default function Feed() {
-  const { data } = useSubscription<{ newFinish: FinishEventPayload }>(NewFinish);
-  const [events, setEvents] = useState<FinishEventPayload[]>([]);
-
-  useEffect(() => {
-    if (data) {
-      setEvents((events) => [data.newFinish, ...events]);
-    }
-  }, [data]);
+  const { feed } = useFeed();
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col max-w-lg h-full py-2 mx-auto">
-      {events.map((event, index) => (
+      {feed.map((event, index) => (
         <div key={index} className="border-b py-3 text-sm">
-          <span className="capitalize font-bold">{event.userName}</span> finished{" "}
-          <span className="capitalize font-bold">{event.bookTitle}</span> and rated it{" "}
-          {event.rating} stars
+          <span className="capitalize font-bold">{event.userName}</span> {t("finished")}{" "}
+          <span className="capitalize font-bold">{event.bookTitle}</span> {t("and rated it")}{" "}
+          {event.rating} {t("stars")}
         </div>
       ))}
-      {events.length === 0 && <div className="text-center text-md text-muted">No activity yet</div>}
+      {feed.length === 0 && (
+        <div className="text-center text-sm text-muted-foreground">No activity yet</div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useCallback, useEffect, useState } from "react";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 
-import { GetUserBooks, UpdateUserBook } from "~/graphql/queries.graphql";
+import { GetUserBooks, UpdateUserBook, NewFinish } from "~/graphql/queries.graphql";
+import { FinishEventPayload } from "~/graphql/resolvers";
 
 import {
   UserBook,
@@ -76,4 +77,22 @@ export const useUserBooks = (opts: {
     loadPrev,
     finishBook,
   };
+};
+
+let allFeed: FinishEventPayload[] | null = null;
+
+export const useFeed = () => {
+  const [root] = useState(!allFeed);
+  const { data } = useSubscription<{ newFinish: FinishEventPayload }>(NewFinish);
+  const [feed, setFeed] = useState<FinishEventPayload[]>(allFeed || []);
+
+  useEffect(() => {
+    if (!data) return;
+    setFeed((events) => [data.newFinish, ...events]);
+    if (root) {
+      allFeed = [data.newFinish, ...feed];
+    }
+  }, [data]);
+
+  return { feed };
 };
