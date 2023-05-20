@@ -50,14 +50,14 @@ export default function Edit() {
   const [rating, setRating] = useState<number>(0);
   const { user } = useAuth();
 
-  const { book, finishBook, updateBook } = useUserBook({
+  const { book, finishBook2, updateBook } = useUserBook({
     userId: user!.id,
     id: Number(router.query.id),
   });
 
   const onFinish = useCallback(() => {
-    finishBook(rating);
-  }, [finishBook, rating]);
+    finishBook2(rating).then(() => setShowRate(false));
+  }, [finishBook2, rating]);
 
   const onClose = useCallback(() => {
     setShowRate(false);
