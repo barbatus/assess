@@ -14,14 +14,15 @@ import {
 import { useUserBooks } from "~/hooks/user-books";
 import { useAuth } from "~/hooks/auth";
 
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { DataTable } from "./data-table";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { DataTable } from "~/components/data-table";
 
 export const columns: ColumnDef<UserBook>[] = [
   {
     accessorKey: "book.title",
     header: ({ column }) => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const { t } = useTranslation();
       const sortIcon =
         column.getIsSorted() === "asc" ? (
@@ -50,6 +51,7 @@ export const columns: ColumnDef<UserBook>[] = [
       );
     },
     cell: ({ row }) => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const { t } = useTranslation();
       return (
         <div className="text-left capitalize">
@@ -69,6 +71,7 @@ export const columns: ColumnDef<UserBook>[] = [
   {
     accessorKey: "book.author",
     header: () => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const { t } = useTranslation();
       return t("Author");
     },
@@ -77,6 +80,7 @@ export const columns: ColumnDef<UserBook>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const { t } = useTranslation();
       const sortIcon =
         column.getIsSorted() === "asc" ? (
@@ -102,7 +106,7 @@ export const columns: ColumnDef<UserBook>[] = [
 ];
 
 export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => {
-  const [sortingState, setSortingState] = useState<SortingState>([]);
+  const [sortingState, setSortingState] = useState<SortingState>([{ id: "book_title", desc: false }]);
   const [filteringState, setFilteringState] = useState<ColumnFiltersState>([]);
   const router = useRouter();
   const { t } = useTranslation();
@@ -153,6 +157,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
       columns={tableColumns}
       data={books}
       loading={loading}
+      initialSort={sortingState}
       onAdd={() => router.push("/add")}
       onFiltering={setFilteringState}
       onSorting={setSortingState}

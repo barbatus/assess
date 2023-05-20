@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { useTranslation } from "react-i18next";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { BooksTable } from "~/components/books";
+import { BooksTable } from "~/pages/home/books";
 
 import { getServerApolloClient } from "~/graphql/client";
 import { GetUserBooks } from "~/graphql/queries.graphql";

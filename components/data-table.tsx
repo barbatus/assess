@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusIcon, Loader2 } from "lucide-react";
 
 import {
@@ -26,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading: boolean;
+  initialSort?: SortingState;
   onAdd: () => void;
   onSorting: (sorting: SortingState) => void;
   onFiltering: (columnFilters: ColumnFiltersState) => void;
@@ -43,13 +44,14 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   loading,
+  initialSort,
   onAdd,
   onFiltering,
   onSorting,
   onNextPage,
   onPrevPage,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([{ id: "book_title", desc: false }]);
+  const [sorting, setSorting] = useState<SortingState>(initialSort || []);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   useEffect(() => {
