@@ -8,6 +8,7 @@ fragment BookData on Book {
   id
   title
   author
+  cover
 }
 
 query GetUserBooks($where: UserBookWhereInput, $order: [UserBookOrderByWithRelationInput!], $offset: Int, $pageSize: Int) {

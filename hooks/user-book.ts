@@ -9,6 +9,7 @@ export type UserBookInput = {
   title: string;
   author: string;
   date: Date;
+  cover: string | null;
   status: "READ" | "READING" | "TO_READ";
 };
 
@@ -45,6 +46,7 @@ export const useUserBook = (opts: { id?: UserBook["id"]; userId?: User["id"] }) 
           data: {
             book: {
               update: {
+                cover:  { set: input.cover },
                 title: { set: input.title.toLowerCase() },
                 author: { set: input.author.toLowerCase() },
               },

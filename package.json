@@ -28,6 +28,7 @@
     "@radix-ui/react-tabs": "^1.0.3",
     "@tanstack/react-table": "^8.9.1",
     "apollo-server-micro": "^3.9.0",
+    "aws-sdk": "^2.1381.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "cookies-next": "^2.1.1",

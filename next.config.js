@@ -30,6 +30,9 @@ const nextConfig = {
   env: {
     POSTGRES_HOST:
       "postgresql://admin1:12345678@test-123-instance-1.cwzxl0huyaog.us-east-1.rds.amazonaws.com:5432/goodreads",
+    AWS_ACCESS_KEY: 'AKIA5WYRG2DEUMORIZXC',
+    AWS_SECRET_KEY: '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',
+    S3_BUCKET: 'alexgoodreads',
   },
 };
 

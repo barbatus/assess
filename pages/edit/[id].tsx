@@ -67,6 +67,7 @@ export default function Edit() {
 
   const onUpdate = useCallback(
     (data: UserBookInput) => {
+      console.log(data);
       return updateBook(data).then(() => router.push("/"));
     },
     [updateBook],

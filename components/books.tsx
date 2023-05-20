@@ -153,7 +153,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
       columns={tableColumns}
       data={books}
       loading={loading}
-      onAdd={() => router.push("add")}
+      onAdd={() => router.push("/add")}
       onFiltering={setFilteringState}
       onSorting={setSortingState}
       onNextPage={loadNext}

@@ -43,6 +43,7 @@ interface Context {
 
 export class CheckBookAccess implements MiddlewareInterface<Context> {
   async use({ context, args }: ResolverData<Context>, next: NextFn) {
+    if (!args.where) return next();
     const book = await context.prisma.userBook.findUnique({ where: args.where });
     if (book?.userId !== context.user?.id) {
       throw new Error("Unauthorized");

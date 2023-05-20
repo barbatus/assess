@@ -15,7 +15,7 @@ export default function Feed() {
         </div>
       ))}
       {feed.length === 0 && (
-        <div className="text-center text-sm text-muted-foreground">No activity yet</div>
+        <div className="text-center text-sm text-muted-foreground">{t('No activity yet')}</div>
       )}
     </div>
   );
