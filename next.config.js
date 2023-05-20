@@ -23,6 +23,10 @@ const nextConfig = {
       },
     ];
   },
+  env: {
+    POSTGRES_HOST:
+      "postgresql://admin1:12345678@test-123-instance-1.cwzxl0huyaog.us-east-1.rds.amazonaws.com:5432/goodreads",
+  },
 };
 
 module.exports = nextConfig;

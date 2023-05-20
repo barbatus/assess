@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
@@ -43,7 +43,7 @@ async function main() {
 }
 
 main()
-  .catch(e => console.error(e))
+  .catch((e) => console.error(e))
   .finally(async () => {
     await prisma.$disconnect();
   });
