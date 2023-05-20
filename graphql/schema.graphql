@@ -74,6 +74,13 @@ input BookCreateInput {
   users: UserBookCreateNestedManyWithoutBookInput
 }
 
+input BookCreateManyInput {
+  author: String!
+  cover: String
+  id: Int
+  title: String!
+}
+
 input BookCreateNestedOneWithoutUsersInput {
   connect: BookWhereUniqueInput
   connectOrCreate: BookCreateOrConnectWithoutUsersInput
@@ -268,6 +275,18 @@ input DateTimeWithAggregatesFilter {
   notIn: [DateTime!]
 }
 
+type FinishEventPayload {
+  bookTitle: String!
+  rating: Int!
+  userId: Int!
+  userName: String!
+}
+
+input FinishInput {
+  id: Int!
+  rating: Int!
+}
+
 input IntFilter {
   equals: Int
   gt: Int
@@ -323,6 +342,9 @@ input IntWithAggregatesFilter {
 }
 
 type Mutation {
+  createManyBook(data: [BookCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createManyUser(data: [UserCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createManyUserBook(data: [UserBookCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
   createOneBook(data: BookCreateInput!): Book!
   createOneUser(data: UserCreateInput!): User!
   createOneUserBook(data: UserBookCreateInput!): UserBook!
@@ -332,6 +354,7 @@ type Mutation {
   deleteOneBook(where: BookWhereUniqueInput!): Book
   deleteOneUser(where: UserWhereUniqueInput!): User
   deleteOneUserBook(where: UserBookWhereUniqueInput!): UserBook
+  finishBook(book: FinishInput!): UserBook!
   updateManyBook(data: BookUpdateManyMutationInput!, where: BookWhereInput): AffectedRowsOutput!
   updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): AffectedRowsOutput!
   updateManyUserBook(data: UserBookUpdateManyMutationInput!, where: UserBookWhereInput): AffectedRowsOutput!
@@ -542,6 +565,11 @@ type Query {
   users(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
 }
 
+enum QueryMode {
+  default
+  insensitive
+}
+
 enum SortOrder {
   asc
   desc
@@ -560,6 +588,7 @@ input StringFilter {
   in: [String!]
   lt: String
   lte: String
+  mode: QueryMode
   not: NestedStringFilter
   notIn: [String!]
   startsWith: String
@@ -574,6 +603,7 @@ input StringNullableFilter {
   in: [String!]
   lt: String
   lte: String
+  mode: QueryMode
   not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
@@ -591,6 +621,7 @@ input StringNullableWithAggregatesFilter {
   in: [String!]
   lt: String
   lte: String
+  mode: QueryMode
   not: NestedStringNullableWithAggregatesFilter
   notIn: [String!]
   startsWith: String
@@ -608,9 +639,14 @@ input StringWithAggregatesFilter {
   in: [String!]
   lt: String
   lte: String
+  mode: QueryMode
   not: NestedStringWithAggregatesFilter
   notIn: [String!]
   startsWith: String
+}
+
+type Subscription {
+  newFinish: FinishEventPayload!
 }
 
 type User {
@@ -681,16 +717,53 @@ input UserBookCreateInput {
   user: UserCreateNestedOneWithoutBooksInput!
 }
 
+input UserBookCreateManyBookInput {
+  date: DateTime!
+  id: Int
+  rating: Int
+  status: String!
+  userId: Int!
+}
+
+input UserBookCreateManyBookInputEnvelope {
+  data: [UserBookCreateManyBookInput!]!
+  skipDuplicates: Boolean
+}
+
+input UserBookCreateManyInput {
+  bookId: Int!
+  date: DateTime!
+  id: Int
+  rating: Int
+  status: String!
+  userId: Int!
+}
+
+input UserBookCreateManyUserInput {
+  bookId: Int!
+  date: DateTime!
+  id: Int
+  rating: Int
+  status: String!
+}
+
+input UserBookCreateManyUserInputEnvelope {
+  data: [UserBookCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
 input UserBookCreateNestedManyWithoutBookInput {
   connect: [UserBookWhereUniqueInput!]
   connectOrCreate: [UserBookCreateOrConnectWithoutBookInput!]
   create: [UserBookCreateWithoutBookInput!]
+  createMany: UserBookCreateManyBookInputEnvelope
 }
 
 input UserBookCreateNestedManyWithoutUserInput {
   connect: [UserBookWhereUniqueInput!]
   connectOrCreate: [UserBookCreateOrConnectWithoutUserInput!]
   create: [UserBookCreateWithoutUserInput!]
+  createMany: UserBookCreateManyUserInputEnvelope
 }
 
 input UserBookCreateOrConnectWithoutBookInput {
@@ -877,6 +950,7 @@ input UserBookUpdateManyWithoutBookNestedInput {
   connect: [UserBookWhereUniqueInput!]
   connectOrCreate: [UserBookCreateOrConnectWithoutBookInput!]
   create: [UserBookCreateWithoutBookInput!]
+  createMany: UserBookCreateManyBookInputEnvelope
   delete: [UserBookWhereUniqueInput!]
   deleteMany: [UserBookScalarWhereInput!]
   disconnect: [UserBookWhereUniqueInput!]
@@ -890,6 +964,7 @@ input UserBookUpdateManyWithoutUserNestedInput {
   connect: [UserBookWhereUniqueInput!]
   connectOrCreate: [UserBookCreateOrConnectWithoutUserInput!]
   create: [UserBookCreateWithoutUserInput!]
+  createMany: UserBookCreateManyUserInputEnvelope
   delete: [UserBookWhereUniqueInput!]
   deleteMany: [UserBookScalarWhereInput!]
   disconnect: [UserBookWhereUniqueInput!]
@@ -979,6 +1054,12 @@ input UserCountOrderByAggregateInput {
 input UserCreateInput {
   books: UserBookCreateNestedManyWithoutUserInput
   email: String!
+  name: String!
+}
+
+input UserCreateManyInput {
+  email: String!
+  id: Int
   name: String!
 }
 
