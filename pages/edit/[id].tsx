@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ArrowLeft, CheckSquareIcon } from "lucide-react";
 import { Rating } from "react-simple-star-rating";
+import { useTranslation } from "react-i18next";
 
 import { BookForm } from "~/components/book-form";
 import { Button } from "~/components/ui/button";
@@ -49,15 +50,16 @@ export default function Edit() {
   const [showRate, setShowRate] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const { user } = useAuth();
+  const { t } = useTranslation();
 
-  const { book, finishBook2, updateBook } = useUserBook({
+  const { book, finishBook, updateBook } = useUserBook({
     userId: user!.id,
     id: Number(router.query.id),
   });
 
   const onFinish = useCallback(() => {
-    finishBook2(rating).then(() => setShowRate(false));
-  }, [finishBook2, rating]);
+    finishBook(rating).then(() => setShowRate(false));
+  }, [finishBook, rating]);
 
   const onClose = useCallback(() => {
     setShowRate(false);
@@ -76,15 +78,15 @@ export default function Edit() {
         <Dialog open onOpenChange={onClose}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Rate</DialogTitle>
+              <DialogTitle> {t('Rate')}</DialogTitle>
             </DialogHeader>
             <Rating onClick={setRating} />
             <DialogFooter>
               <Button variant="secondary" size="sm" onClick={onClose}>
-                Cancel
+                {t('Cancel')}
               </Button>
               <Button type="submit" size="sm" onClick={onFinish}>
-                Ok
+                {t('Ok')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -104,7 +106,7 @@ export default function Edit() {
           onClick={() => setShowRate(true)}
         >
           <CheckSquareIcon className="h-5 w-5 mr-2" />
-          Finished
+          {t('Finished')}
         </Button>
       </div>
       <BookForm initialData={book} onDone={onUpdate} />

@@ -1,11 +1,14 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { TypeOf, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "~/lib/utils";
+import { UserBookInput } from "~/hooks/user-book";
+import { UserBook } from "~/prisma/generated/type-graphql";
 
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -14,9 +17,6 @@ import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-
-import { UserBookInput } from "~/hooks/user-book";
-import { UserBook } from "~/prisma/generated/type-graphql";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -48,6 +48,7 @@ export const BookForm = (props: {
   } = useForm<FormInput>({
     resolver: zodResolver(formSchema),
   });
+  const { t } = useTranslation();
 
   useEffect(() => {
     reset({
@@ -70,19 +71,19 @@ export const BookForm = (props: {
     <div className="grid gap-4 gap-y-5 py-2 max-w-md mx-auto">
       <FormRow>
         <Label htmlFor="name" className="sm:text-right font-bold">
-          Title
+          {t("Title")}
         </Label>
         <Input id="title" className="col-span-3 capitalize" {...register("title")} />
       </FormRow>
       <FormRow>
         <Label htmlFor="author" className="sm:text-right font-bold">
-          Author
+          {t("Author")}
         </Label>
         <Input id="author" className="col-span-3 capitalize" {...register("author")} />
       </FormRow>
       <FormRow>
         <Label htmlFor="date" className="sm:text-right font-bold">
-          Date
+          {t("Date")}
         </Label>
         <Controller
           control={control}
@@ -115,7 +116,7 @@ export const BookForm = (props: {
       </FormRow>
       <FormRow>
         <Label htmlFor="username" className="sm:text-right font-bold">
-          Status
+          {t("Status")}
         </Label>
         <Controller
           control={control}
@@ -126,9 +127,9 @@ export const BookForm = (props: {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="READ">Read</SelectItem>
-                <SelectItem value="READING">Reading</SelectItem>
-                <SelectItem value="TO_READ">Want to read</SelectItem>
+                <SelectItem value="READ">{t("Read")}</SelectItem>
+                <SelectItem value="READING">{t("Reading")}</SelectItem>
+                <SelectItem value="TO_READ">{t("Want To Read")}</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -141,7 +142,7 @@ export const BookForm = (props: {
           loading={loading}
           onClick={handleSubmit(onSubmitHandler)}
         >
-          {props.initialData?.id ? "Save" : "Add"}
+          {props.initialData?.id ? t("Save") : t("Add")}
         </Button>
       </div>
     </div>

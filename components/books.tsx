@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import set from "lodash.set";
 import { ColumnDef, SortingState, ColumnFiltersState } from "@tanstack/react-table";
-import { ArrowUp, ArrowDown, EyeIcon } from "lucide-react";
+import { ArrowUp, ArrowDown, EyeIcon, Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 import {
   UserBook,
@@ -21,6 +22,7 @@ export const columns: ColumnDef<UserBook>[] = [
   {
     accessorKey: "book.title",
     header: ({ column }) => {
+      const { t } = useTranslation();
       const sortIcon =
         column.getIsSorted() === "asc" ? (
           <ArrowDown className="ml-2 h-4 w-4" />
@@ -35,7 +37,7 @@ export const columns: ColumnDef<UserBook>[] = [
             className="p-1 pb-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Title
+            {t("Title")}
             {column.getIsSorted() && sortIcon}
           </Button>
           <Input
@@ -48,12 +50,17 @@ export const columns: ColumnDef<UserBook>[] = [
       );
     },
     cell: ({ row }) => {
+      const { t } = useTranslation();
       return (
         <div className="text-left capitalize">
           <h5>{row.original.book?.title}</h5>
           <div className="flex sm:hidden justify-between text-muted-foreground mt-2">
-            <div className="text-sm">Author: {row.original.book?.author}</div>
-            <div className="text-xs">Date: {new Date(row.original.date).toLocaleDateString()}</div>
+            <div className="text-sm">
+              {t("Author")}: {row.original.book?.author}
+            </div>
+            <div className="text-xs">
+              {t("Date")}: {new Date(row.original.date).toLocaleDateString()}
+            </div>
           </div>
         </div>
       );
@@ -61,12 +68,16 @@ export const columns: ColumnDef<UserBook>[] = [
   },
   {
     accessorKey: "book.author",
-    header: "Author",
+    header: () => {
+      const { t } = useTranslation();
+      return t("Author");
+    },
     meta: { className: "hidden sm:table-cell capitalize" },
   },
   {
     accessorKey: "date",
     header: ({ column }) => {
+      const { t } = useTranslation();
       const sortIcon =
         column.getIsSorted() === "asc" ? (
           <ArrowDown className="ml-2 h-4 w-4" />
@@ -78,7 +89,7 @@ export const columns: ColumnDef<UserBook>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Date
+          {t("Date")}
           {column.getIsSorted() && sortIcon}
         </Button>
       );
@@ -94,6 +105,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
   const [sortingState, setSortingState] = useState<SortingState>([]);
   const [filteringState, setFilteringState] = useState<ColumnFiltersState>([]);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const order = sortingState.map((sort) => {
     return set<UserBookOrderByWithRelationInput>(
@@ -117,7 +129,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
   const { user } = useAuth();
 
   const { books, loading, loadNext, loadPrev } = useUserBooks({
-    userId: user!.id,
+    userId: user?.id,
     order,
     where,
     status: opts.status,
@@ -125,7 +137,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
 
   const tableColumns = useMemo(() => {
     return columns.concat({
-      header: "Actions",
+      header: t("Actions"),
       cell: ({ row }) => {
         return (
           <Button size="sm" variant="ghost" onClick={() => router.push(`/edit/${row.original.id}`)}>
@@ -134,19 +146,18 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
         );
       },
     });
-  }, [opts.status]);
+  }, [t, opts.status]);
 
   return (
-    <>
-      <DataTable
-        columns={tableColumns}
-        data={books}
-        onAdd={() => router.push("add")}
-        onFiltering={setFilteringState}
-        onSorting={setSortingState}
-        onNextPage={loadNext}
-        onPrevPage={loadPrev}
-      />
-    </>
+    <DataTable
+      columns={tableColumns}
+      data={books}
+      loading={loading}
+      onAdd={() => router.push("add")}
+      onFiltering={setFilteringState}
+      onSorting={setSortingState}
+      onNextPage={loadNext}
+      onPrevPage={loadPrev}
+    />
   );
 };

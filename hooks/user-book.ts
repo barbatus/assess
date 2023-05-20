@@ -26,23 +26,6 @@ export const useUserBook = (opts: { id?: UserBook["id"]; userId?: User["id"] }) 
 
   const finishBook = useCallback(
     (rating: number) => {
-      return updateMutate({
-        variables: {
-          data: {
-            status: { set: "READ" },
-            rating: { set: rating },
-          },
-          where: {
-            id: opts.id,
-          },
-        },
-      });
-    },
-    [updateMutate],
-  );
-
-  const finishBook2 = useCallback(
-    (rating: number) => {
       return finishMutate({
         variables: {
           book: {
@@ -107,10 +90,9 @@ export const useUserBook = (opts: { id?: UserBook["id"]; userId?: User["id"] }) 
   );
 
   return {
-    finishBook,
     addBook,
     updateBook,
-    finishBook2,
+    finishBook,
     adding,
     book: data?.userBook,
     loading,

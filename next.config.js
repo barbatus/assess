@@ -3,6 +3,10 @@ var path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  i18n: {
+    locales: ['en', 'pl'],
+    defaultLocale: 'en',
+  },
   webpack: (config) => {
     config.experiments = config.experiments || {};
     config.experiments.topLevelAwait = true;
