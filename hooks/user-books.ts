@@ -1,11 +1,21 @@
-import { useCallback, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useCallback, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 
-import { GetUserBooks, UpdateUserBook } from '~/graphql/queries.graphql';
+import { GetUserBooks, UpdateUserBook } from "~/graphql/queries.graphql";
 
-import { UserBook, User, UserBookOrderByWithRelationInput, UserBookWhereInput } from '~/prisma/generated/type-graphql';
+import {
+  UserBook,
+  User,
+  UserBookOrderByWithRelationInput,
+  UserBookWhereInput,
+} from "~/prisma/generated/type-graphql";
 
-export const useUserBooks = (opts: { userId?: User['id'], order: UserBookOrderByWithRelationInput[], where: UserBookWhereInput, status: UserBook['status']  }) => {
+export const useUserBooks = (opts: {
+  userId?: User["id"];
+  order: UserBookOrderByWithRelationInput[];
+  where: UserBookWhereInput;
+  status: UserBook["status"];
+}) => {
   const [page, setPage] = useState(0);
 
   const variables = {
@@ -15,7 +25,7 @@ export const useUserBooks = (opts: { userId?: User['id'], order: UserBookOrderBy
     order: opts.order,
   };
   const { data, loading, error } = useQuery<{ userBooks: UserBook[] }>(GetUserBooks, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: "cache-and-network",
     variables,
     skip: !opts.userId,
   });
@@ -25,41 +35,45 @@ export const useUserBooks = (opts: { userId?: User['id'], order: UserBookOrderBy
       cache.updateQuery({ query: GetUserBooks, variables }, (data) => {
         return {
           ...data,
-          userBooks: data.userBooks.filter((book: UserBook) => book.id !== updateOneUserBook.id)
-      }});
+          userBooks: data.userBooks.filter((book: UserBook) => book.id !== updateOneUserBook.id),
+        };
+      });
     },
   });
 
   const loadNext = useCallback(() => {
     if (loading || !data || (page !== 0 && data.userBooks.length < 10)) return;
-    setPage(page => page + 1);
+    setPage((page) => page + 1);
   }, [loading, data]);
 
   const loadPrev = useCallback(() => {
     if (loading) return;
-    setPage(page => Math.max(0, page - 1));
+    setPage((page) => Math.max(0, page - 1));
   }, [loading]);
 
-  const finishBook = useCallback((userBookId: UserBook['id'], rating: number) => {
-    return finishMutate({
-      variables: {
-        data: {
-          status: { set: 'READ' },
-          rating: { set: rating },
+  const finishBook = useCallback(
+    (userBookId: UserBook["id"], rating: number) => {
+      return finishMutate({
+        variables: {
+          data: {
+            status: { set: "READ" },
+            rating: { set: rating },
+          },
+          where: {
+            id: userBookId,
+          },
         },
-        where: {
-          id: userBookId,
-        },
-      },
-    });
-  }, [finishMutate]);
+      });
+    },
+    [finishMutate],
+  );
 
   return {
-    books: data?.userBooks || [], 
+    books: data?.userBooks || [],
     loading,
     error,
     loadNext,
     loadPrev,
     finishBook,
   };
-}
+};

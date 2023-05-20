@@ -45,3 +45,20 @@ query GetUserBook($where: UserBookWhereUniqueInput!) {
     }
   }
 }
+
+mutation FinishBook($book: FinishInput!) {
+  finishBook(book: $book) {
+    ...UserBookData
+    book {
+      ...BookData
+    }
+  }
+}
+
+subscription NewFinish {
+  newFinish {
+    userName
+    bookTitle
+    rating
+  }
+}
