@@ -34,6 +34,7 @@ const nextConfig = {
     AWS_SECRET_KEY: 'GZL+YhgL4rUwD0uUdA5OJhomroxNx9JVaiU3SKo3',
     S3_BUCKET: 'alexgoodreads',
   },
+  pageExtensions: ['page.tsx', 'page.ts'],
 };
 
 module.exports = nextConfig;

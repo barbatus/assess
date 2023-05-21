@@ -24,6 +24,7 @@ i18n.use(initReactI18next).init({
         "and rated it": "and rated it",
         Stars: "Stars",
         "No activity yet": "No activity yet",
+        'No results.': 'No results.',
       },
     },
     pl: {
@@ -48,6 +49,7 @@ i18n.use(initReactI18next).init({
         stars: "gwiazdkami",
         finished: "skończyłem",
         "No activity yet": "Brak aktywności",
+        'No results.': 'Brak wyników.',
       },
     },
   },

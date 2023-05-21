@@ -33,6 +33,7 @@ export const columns: ColumnDef<UserBook>[] = [
       return (
         <div>
           <Button
+            data-testid={column.id}
             variant="ghost"
             size="sm"
             className="p-1 pb-0"
@@ -90,6 +91,7 @@ export const columns: ColumnDef<UserBook>[] = [
         );
       return (
         <Button
+          data-testid={column.id}
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -105,8 +107,10 @@ export const columns: ColumnDef<UserBook>[] = [
   },
 ];
 
-export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => {
-  const [sortingState, setSortingState] = useState<SortingState>([{ id: "book_title", desc: false }]);
+export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ"; pageSize?: number }) => {
+  const [sortingState, setSortingState] = useState<SortingState>([
+    { id: "book_title", desc: false },
+  ]);
   const [filteringState, setFilteringState] = useState<ColumnFiltersState>([]);
   const router = useRouter();
   const { t } = useTranslation();
@@ -133,6 +137,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
   const { user } = useAuth();
 
   const { books, loading, loadNext, loadPrev } = useUserBooks({
+    pageSize: opts.pageSize,
     userId: user?.id,
     order,
     where,
@@ -144,7 +149,7 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ" }) => 
       header: t("Actions"),
       cell: ({ row }) => {
         return (
-          <Button size="sm" variant="ghost" onClick={() => router.push(`/edit/${row.original.id}`)}>
+          <Button data-testid="edit" size="sm" variant="ghost" onClick={() => router.push(`/edit/${row.original.id}`)}>
             <EyeIcon className="w-5" />
           </Button>
         );

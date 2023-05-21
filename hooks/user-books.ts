@@ -16,12 +16,14 @@ export const useUserBooks = (opts: {
   order: UserBookOrderByWithRelationInput[];
   where: UserBookWhereInput;
   status: UserBook["status"];
+  pageSize?: number;
 }) => {
   const [page, setPage] = useState(0);
+  const pageSize = opts.pageSize || 10;
 
   const variables = {
-    offset: page * 10,
-    pageSize: 10,
+    offset: page * pageSize,
+    pageSize: pageSize,
     where: { userId: { equals: opts.userId }, status: { equals: opts.status }, ...opts.where },
     order: opts.order,
   };
@@ -43,7 +45,7 @@ export const useUserBooks = (opts: {
   });
 
   const loadNext = useCallback(() => {
-    if (loading || !data || (page !== 0 && data.userBooks.length < 10)) return;
+    if (loading || !data || data.userBooks.length < pageSize) return;
     setPage((page) => page + 1);
   }, [loading, data]);
 

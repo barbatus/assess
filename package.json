@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier --write **/**.{tsx,ts,js}",
+    "prettier": "prettier --write **/**/**.{tsx,ts,js}",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
     "reset:db": "prisma migrate reset -f",
@@ -40,7 +40,6 @@
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.13.1",
     "i18next": "^22.5.0",
-    "jest-transform-graphql": "^2.1.0",
     "jose": "^4.14.4",
     "lodash.set": "^4.3.2",
     "lucide-react": "^0.217.0",
@@ -58,6 +57,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "jest-transform-graphql": "^2.1.0",
     "@babel/core": "^7.21.8",
     "@faker-js/faker": "^8.0.1",
     "@graphql-tools/jest-transform": "^2.0.0",
