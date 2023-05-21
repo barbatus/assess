@@ -70,6 +70,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualSorting: true,
+    manualFiltering: true,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getSortedRowModel: getSortedRowModel(),
@@ -130,7 +131,13 @@ export function DataTable<TData, TValue>({
           <PlusIcon className="h-6 w-6" />
         </Button>
         <div className="space-x-2">
-          <Button data-testid="prev" className="mr-1" variant="outline" size="sm" onClick={onPrevPage}>
+          <Button
+            data-testid="prev"
+            className="mr-1"
+            variant="outline"
+            size="sm"
+            onClick={onPrevPage}
+          >
             Previous
           </Button>
           <Button data-testid="next" variant="outline" size="sm" onClick={onNextPage}>
