@@ -113,7 +113,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : t('No results.')}
+                  {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : t("No results.")}
                 </TableCell>
               </TableRow>
             )}

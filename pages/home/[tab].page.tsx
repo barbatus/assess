@@ -43,29 +43,30 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
 export default function Home() {
   const router = useRouter();
   const tab = router.query.tab as string;
+  const pageSize = Number(router.query.ps) || 10;
   const { t } = useTranslation();
 
   return (
     <Tabs defaultValue={tab || "read"} className="w-full">
       <TabsList className="grid grid-cols-3 sm:w-[400px]">
-        <TabsTrigger value="read" onClick={() => router.push("./read")}>
-          {t('Read')}
+        <TabsTrigger data-testid="read" value="read" onClick={() => router.push("./read")}>
+          {t("Read")}
         </TabsTrigger>
-        <TabsTrigger value="reading" onClick={() => router.push("./reading")}>
-          {t('Reading')}
+        <TabsTrigger data-testid="reading" value="reading" onClick={() => router.push("./reading")}>
+          {t("Reading")}
         </TabsTrigger>
-        <TabsTrigger value="to_read" onClick={() => router.push("./to_read")}>
-          {t('Want To Read')}
+        <TabsTrigger data-testid="to_read" value="to_read" onClick={() => router.push("./to_read")}>
+          {t("Want To Read")}
         </TabsTrigger>
       </TabsList>
       <TabsContent value="read" className="w-full">
-        <BooksTable status="READ" />
+        <BooksTable status="READ" pageSize={pageSize} />
       </TabsContent>
       <TabsContent value="reading" className="w-full">
-        <BooksTable status="READING" />
+        <BooksTable status="READING" pageSize={pageSize} />
       </TabsContent>
       <TabsContent value="to_read" className="w-full">
-        <BooksTable status="TO_READ" />
+        <BooksTable status="TO_READ" pageSize={pageSize} />
       </TabsContent>
     </Tabs>
   );

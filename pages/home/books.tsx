@@ -149,7 +149,12 @@ export const BooksTable = (opts: { status: "READ" | "READING" | "TO_READ"; pageS
       header: t("Actions"),
       cell: ({ row }) => {
         return (
-          <Button data-testid="edit" size="sm" variant="ghost" onClick={() => router.push(`/edit/${row.original.id}`)}>
+          <Button
+            data-testid="edit"
+            size="sm"
+            variant="ghost"
+            onClick={() => router.push(`/edit/${row.original.id}`)}
+          >
             <EyeIcon className="w-5" />
           </Button>
         );

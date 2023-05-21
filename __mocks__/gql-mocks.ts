@@ -3,7 +3,7 @@ import { GetUserBooks } from "~/graphql/queries.graphql";
 
 type Status = "READ" | "READING" | "TO_READ";
 
-export function buildUserBooks(status: Status, len: number) {
+export function buildUserBooks(status: Status, offset: number, len: number) {
   const userBooks = [
     {
       id: 35,
@@ -65,10 +65,14 @@ export function buildUserBooks(status: Status, len: number) {
       __typename: "UserBook",
     },
   ];
-  return userBooks.slice(0, len);
+  return userBooks.slice(offset, offset + len);
 }
 
-export function buildMocks(status: Status = "READ", pageSize = 10): MockedProviderProps["mocks"] {
+export function buildMocks(
+  status: Status = "READ",
+  pageSize = 10,
+  authors?: string[],
+): MockedProviderProps["mocks"] {
   return [
     {
       request: {
@@ -78,14 +82,16 @@ export function buildMocks(status: Status = "READ", pageSize = 10): MockedProvid
           order: [{ book: { title: "asc" } }],
           pageSize,
           where: {
-            status: { equals: "READ" },
+            status: { equals: status },
             userId: { equals: 1 },
           },
         },
       },
       result: {
         data: {
-          userBooks: buildUserBooks(status, pageSize),
+          userBooks: buildUserBooks(status, 0, pageSize).filter((book) =>
+            authors ? authors.includes(book.book.author) : true,
+          ),
         },
       },
     },
@@ -95,16 +101,18 @@ export function buildMocks(status: Status = "READ", pageSize = 10): MockedProvid
         variables: {
           offset: pageSize,
           order: [{ book: { title: "asc" } }],
-          pageSize: 2 * pageSize,
+          pageSize: pageSize,
           where: {
-            status: { equals: "READ" },
+            status: { equals: status },
             userId: { equals: 1 },
           },
         },
       },
       result: {
         data: {
-          userBooks: buildUserBooks(status, pageSize),
+          userBooks: buildUserBooks(status, pageSize, pageSize).filter((book) =>
+            authors ? authors.includes(book.book.author) : true,
+          ),
         },
       },
     },

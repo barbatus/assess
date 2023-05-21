@@ -18,52 +18,59 @@ const mockUser: User = {
   email: 'bob@alice.com',
 }
 
-const renderMockTable = (status: "READ" | 'READING' | 'TO_READ', pageSize: number) => {
-  render(
+const renderMockTable = (status: "READ" | 'READING' | 'TO_READ', pageSize: number, authors?: string[]) => {
+  return render(
     <AuthProvider initialUser={mockUser}>
-      <MockedProvider mocks={buildMocks(status, pageSize)}>
+      <MockedProvider mocks={buildMocks(status, pageSize, authors)}>
         <BooksTable status={status} pageSize={pageSize} />
       </MockedProvider>
     </AuthProvider>
   );
 }
 
-it("render books with READ status in table", async () => {
-  renderMockTable('READ', 10);
-  expect(await screen.findByText("otis fay")).toBeInTheDocument();
-  expect(await screen.findByText("3/19/2023")).toBeInTheDocument();
-});
-
-it("pressing Next should render next page", async () => {
-  renderMockTable('READ', 2);
-  await act(() => {
-    fireEvent.click(screen.getByTestId('next'));
+describe('BooksTable', () => {
+  it("render books with READ status in table", async () => {
+    const {container} = renderMockTable('READ', 10, ['otis fay', "wallace d'amore"]);
+    await screen.findByText("otis fay");
+    expect(container.querySelectorAll("tr").length).toEqual(3);
+    expect(container.querySelector("td")?.innerHTML).toContain('otis fay');
   });
-  expect(await screen.findByText("wallace d'amore")).toBeInTheDocument();
-});
 
-it("pressing Next should not render next page if no more books", async () => {
-  renderMockTable('READ', 6);
-  await act(() => {
-    fireEvent.click(screen.getByTestId('next'));
+  it("pressing Next should render next page", async () => {
+    renderMockTable('READ', 2);
+    await screen.findByText("otis fay")
+    await act(() => {
+      fireEvent.click(screen.getByTestId('next'));
+    });
+    expect(await screen.findByText("francisco corwin jr.")).toBeInTheDocument();
+    expect(screen.queryByText("gayle dooley")).not.toBeInTheDocument();
   });
-  expect(await screen.findByText("otis fay")).toBeInTheDocument();
-});
 
-it("should show 'no results' if no data", async () => {
-  renderMockTable('READING', 6);
-  await act(() => {
-    fireEvent.click(screen.getByTestId('next'));
+  it("pressing Next should not render next page if no more books", async () => {
+    renderMockTable('READ', 6);
+    await screen.findByText("otis fay")
+    await act(() => {
+      fireEvent.click(screen.getByTestId('next'));
+    });
+    expect(await screen.findByText("otis fay")).toBeInTheDocument();
   });
-  expect(await screen.findByText(new RegExp("no results", "i"))).toBeInTheDocument();
-});
 
-it("pressing Add should navigate to add page", async () => {
-  renderMockTable('READING', 6);
-  await act(() => {
-    fireEvent.click(screen.getByTestId('add'));
+  it("should show 'no results' if no data", async () => {
+    renderMockTable('READING', 5);
+    await screen.findByText("otis fay")
+    await act(() => {
+      fireEvent.click(screen.getByTestId('next'));
+    });
+    expect(await screen.findByText(new RegExp("no results", "i"))).toBeInTheDocument();
   });
-  expect(mockRouter).toMatchObject({ 
-    pathname: "/add",
+
+  it("pressing Add should navigate to add page", async () => {
+    renderMockTable('READING', 5);
+    await act(() => {
+      fireEvent.click(screen.getByTestId('add'));
+    });
+    expect(mockRouter).toMatchObject({ 
+      pathname: "/add",
+    });
   });
 });
