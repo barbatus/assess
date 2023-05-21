@@ -32,7 +32,7 @@ const renderMockPage = (statuses: ("READ" | 'READING' | 'TO_READ')[], pageSize: 
 }
 
 it("render books with READ by default and navigate to READING on tab click", async () => {
-  const mock = renderMockPage(['READ', 'READING'], 10, ['otis fay', "wallace d'amore"]);
+  const mock = renderMockPage(['READ', 'READING'], 4, ['otis fay', "wallace d'amore"]);
   expect(await screen.findByText("otis fay")).toBeInTheDocument();
   expect(await screen.queryByText("wallace d'amore")).not.toBeInTheDocument();
 
@@ -45,7 +45,7 @@ it("render books with READ by default and navigate to READING on tab click", asy
 });
 
 it("render load books with READING status when it's in the route param", async () => {
-  mockRouter.push("/home?tab=reading");
+  mockRouter.push("/home?tab=reading&ps=10");
   const mock = renderMockPage(['READ', 'READING'], 10, ['otis fay', "wallace d'amore"]);
   expect(await screen.findByText("wallace d'amore")).toBeInTheDocument();
   expect(await mock.container.querySelectorAll('tr').length).toEqual(2);

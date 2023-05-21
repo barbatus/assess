@@ -11,7 +11,7 @@
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
     "reset:db": "prisma migrate reset -f",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "prisma": {
     "seed": "node -r @swc-node/register prisma/seed.ts"
