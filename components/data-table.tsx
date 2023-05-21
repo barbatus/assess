@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PlusIcon, Loader2 } from "lucide-react";
+import { PlusIcon, Loader2, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -130,7 +130,7 @@ export function DataTable<TData, TValue>({
         >
           <PlusIcon className="h-6 w-6" />
         </Button>
-        <div className="space-x-2">
+        <div className="space-x-2 text-muted-foreground">
           <Button
             data-testid="prev"
             className="mr-1"
@@ -138,10 +138,10 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={onPrevPage}
           >
-            Previous
+            <ChevronsLeft className="h-6 w-6" />
           </Button>
           <Button data-testid="next" variant="outline" size="sm" onClick={onNextPage}>
-            Next
+            <ChevronsRight className="h-6 w-6" />
           </Button>
         </div>
       </div>

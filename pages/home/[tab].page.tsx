@@ -8,10 +8,11 @@ import { BooksTable } from "~/pages/home/books";
 import { getServerApolloClient } from "~/graphql/client";
 import { GetUserBooks } from "~/graphql/queries.graphql";
 
-import { getUser } from "../../middleware";
+import { getUser } from "../../middleware.page";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
   const tab = query.tab as string | undefined;
+  const pageSize = Number(query.ps) || 4 ;
   const apolloClient = getServerApolloClient(req.cookies["authToken"]);
 
   const user = await getUser(req);
@@ -21,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
       query: GetUserBooks,
       variables: {
         offset: 0,
-        pageSize: 10,
+        pageSize,
         where: { userId: { equals: user.id }, status: { equals: tab?.toUpperCase() } },
         order: [{ book: { title: "asc" } }],
       },
@@ -43,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
 export default function Home() {
   const router = useRouter();
   const tab = router.query.tab as string;
-  const pageSize = Number(router.query.ps) || 10;
+  const pageSize = Number(router.query.ps) || 4 ;
   const { t } = useTranslation();
 
   return (

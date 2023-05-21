@@ -15,7 +15,7 @@ export async function sign(payload: Object, secret: string): Promise<string> {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await prisma.$connect();
-  const user = await prisma.user.findUnique({ where: { id: 1 } });
+  const user = await prisma.user.findUnique({ where: { id: 2 } });
   setCookie("authToken", await sign(user!, "secret"), { req, res });
   return res.json(user);
 }

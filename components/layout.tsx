@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Inter } from "@next/font/google";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 
 import { useFeed } from "~/hooks/user-books";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -19,6 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     router.push(router.pathname, router.asPath, { locale });
   };
   useFeed();
+  const { t } = useTranslation();
 
   return (
     <main className={clsx("flex h-screen flex-col", inter.className)}>
@@ -31,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className={clsx("pr-0", { underline: router.pathname.includes("/home") })}
             >
               <Link href="/" locale={router.locale}>
-                Books
+                {t("Books")}
               </Link>
             </Button>
             <Button
@@ -40,7 +42,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className={clsx("mr-4", { underline: router.pathname === "/feed" })}
             >
               <Link href="/feed" locale={router.locale}>
-                Feed
+                {t("Feed")}
               </Link>
             </Button>
             <Select value={router.locale} onValueChange={onLocaleChange}>

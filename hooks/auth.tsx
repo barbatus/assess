@@ -36,6 +36,9 @@ export const useAuth = () => {
     if (!user && router.pathname !== "/login") {
       router.push("/login");
     }
+    if (user && router.pathname === "/login") {
+      window.location.href = window.location.origin;
+    }
   }, [user, router]);
 
   const authMe = useCallback(async () => {

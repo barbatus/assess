@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     i18n.changeLanguage(router.locale);
-  }, [router.locale]);
+  }, [i18n, router.locale]);
 
   return (
     <AuthProvider initialUser={pageProps.initialUser}>

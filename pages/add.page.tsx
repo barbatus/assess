@@ -18,7 +18,7 @@ export default function Create() {
     (data: UserBookInput) => {
       return addBook(data).then(() => router.push("/"));
     },
-    [addBook],
+    [router, addBook],
   );
 
   return (

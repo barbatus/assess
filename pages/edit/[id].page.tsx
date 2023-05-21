@@ -21,7 +21,7 @@ import { useAuth } from "~/hooks/auth";
 import { getServerApolloClient } from "~/graphql/client";
 import { GetUserBook } from "~/graphql/queries.graphql";
 
-import { getUser } from "../../middleware";
+import { getUser } from "../../middleware.page";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
   const apolloClient = getServerApolloClient(req.cookies["authToken"]);

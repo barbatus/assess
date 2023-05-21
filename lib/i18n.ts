@@ -25,6 +25,8 @@ i18n.use(initReactI18next).init({
         Stars: "Stars",
         "No activity yet": "No activity yet",
         "No results.": "No results.",
+        "Books": "Books",
+        "Feed": "Feed",
       },
     },
     pl: {
@@ -50,6 +52,8 @@ i18n.use(initReactI18next).init({
         finished: "skończyłem",
         "No activity yet": "Brak aktywności",
         "No results.": "Brak wyników.",
+        "Books": "Książki",
+        "Feed": "Aktywność",
       },
     },
   },

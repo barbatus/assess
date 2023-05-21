@@ -73,7 +73,7 @@ applyResolversEnhanceMap({
 const options: RedisOptions = {
   host: process.env.REDIS_HOST,
   port: 40344,
-  username: 'default',
+  username: "default",
   password: process.env.REDIS_PWD,
   retryStrategy: (times) => Math.max(times * 100, 3000),
 };
