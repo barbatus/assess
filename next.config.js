@@ -33,6 +33,8 @@ const nextConfig = {
     AWS_ACCESS_KEY: 'AKIA5WYRG2DEUMORIZXC',
     AWS_SECRET_KEY: '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',
     S3_BUCKET: 'alexgoodreads',
+    REDIS_HOST: 'us1-notable-egret-40344.upstash.io',
+    REDIS_PWD: 'bf273a32000b42579707c4b3d4f451fd',
   },
   pageExtensions: ['page.tsx', 'page.ts'],
 };

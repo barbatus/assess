@@ -83,7 +83,7 @@ export default function Edit() {
             </DialogHeader>
             <Rating onClick={setRating} />
             <DialogFooter>
-              <Button variant="secondary" size="sm" onClick={onClose}>
+              <Button className="mr-1" variant="secondary" size="sm" onClick={onClose}>
                 {t("Cancel")}
               </Button>
               <Button type="submit" size="sm" onClick={onFinish}>
