@@ -79,15 +79,15 @@ export default function Edit() {
         <Dialog open onOpenChange={onClose}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle> {t('Rate')}</DialogTitle>
+              <DialogTitle> {t("Rate")}</DialogTitle>
             </DialogHeader>
             <Rating onClick={setRating} />
             <DialogFooter>
               <Button variant="secondary" size="sm" onClick={onClose}>
-                {t('Cancel')}
+                {t("Cancel")}
               </Button>
               <Button type="submit" size="sm" onClick={onFinish}>
-                {t('Ok')}
+                {t("Ok")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -107,7 +107,7 @@ export default function Edit() {
           onClick={() => setShowRate(true)}
         >
           <CheckSquareIcon className="h-5 w-5 mr-2" />
-          {t('Finished')}
+          {t("Finished")}
         </Button>
       </div>
       <BookForm initialData={book} onDone={onUpdate} />

@@ -46,7 +46,7 @@ export const useUserBook = (opts: { id?: UserBook["id"]; userId?: User["id"] }) 
           data: {
             book: {
               update: {
-                cover:  { set: input.cover },
+                cover: { set: input.cover },
                 title: { set: input.title.toLowerCase() },
                 author: { set: input.author.toLowerCase() },
               },

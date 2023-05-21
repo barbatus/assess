@@ -79,28 +79,30 @@ export const BookForm = (props: {
 
       setUploading(true);
       try {
-        const file = e.target.files[0]
+        const file = e.target.files[0];
         const filename = encodeURIComponent(file.name);
-        const res = await fetch(`/api/upload?file=${filename}`)
+        const res = await fetch(`/api/upload?file=${filename}`);
         const data = await res.json();
         const formData = new FormData();
-        setValue('cover', file.name);
+        setValue("cover", file.name);
 
         Object.entries({ ...data.fields, file }).forEach(([key, value]) => {
           // @ts-ignore
-          formData.append(key, value)
+          formData.append(key, value);
         });
 
         await fetch(data.url, {
-          method: 'POST',
+          method: "POST",
           body: formData,
         });
-      } catch(err) {
-        console.error(err)
+      } catch (err) {
+        console.error(err);
       } finally {
         setUploading(false);
       }
-    }, [setValue]);
+    },
+    [setValue],
+  );
 
   return (
     <div className="grid gap-4 gap-y-5 py-2 max-w-md mx-auto">
@@ -158,20 +160,24 @@ export const BookForm = (props: {
           name="cover"
           render={({ field: { onChange, ...fieldProps }, fieldState: { error } }) => (
             <>
-            <Label className="cursor-pointer col-span-1">
-              Upload
-              <input
-                onChange={uploadImage}
-                type="file"
-                accept="image/png, image/jpeg"
-                name="cover"
-                className="hidden"
-              />
-            </Label>
-            {!uploading && <span className="text-sm leading-3 text-muted-foreground whitespace-nowrap">{fieldProps.value}</span>}
-            {uploading && <span className="text-sm leading-3">Uploading...</span>}
-          </>
-        )}
+              <Label className="cursor-pointer col-span-1">
+                Upload
+                <input
+                  onChange={uploadImage}
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  name="cover"
+                  className="hidden"
+                />
+              </Label>
+              {!uploading && (
+                <span className="text-sm leading-3 text-muted-foreground whitespace-nowrap">
+                  {fieldProps.value}
+                </span>
+              )}
+              {uploading && <span className="text-sm leading-3">Uploading...</span>}
+            </>
+          )}
         />
       </FormRow>
       <FormRow>
