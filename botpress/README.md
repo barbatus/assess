@@ -1,6 +1,7 @@
 ## Stack
 
 Server: Prisma + TRPC
+
 Client: Vite + React + MUI Joy
 
 ## Setup
