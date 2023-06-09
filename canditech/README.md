@@ -1,4 +1,4 @@
-## Basic
+## Intro
 
 SPA to manage test assessments, which consist of test sectons and each section can have a few questions of 3 types:
 select one from multiple options, exact text answer and open form text answer.

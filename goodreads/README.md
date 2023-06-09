@@ -1,3 +1,9 @@
+## Intro
+
+Basic GoodReads clone.
+
+It took up to 40h to implement.
+
 ## Stack
 
 Server: AWS Postgres + Prisma + Next + Type GraphQL + Apollo Server + Redis + AWS S3
@@ -13,7 +19,3 @@ Run the development server:
 ```bash
 npm start
 ```
-
-## Info
-
-It took up to 40h to implement.
