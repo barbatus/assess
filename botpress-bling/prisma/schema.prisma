@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Question {
+  id       Int      @id @default(autoincrement())
+  text     String    @unique
+  order    Int?
+  stories  Story[]
+}
+
+model Answer {
+  id        Int   @id @default(autoincrement())
+  text      String @unique
+  stories   Story[]
+}
+
+model TestChat {
+  id         Int      @id @default(autoincrement())
+  artefactId Int      @unique
+  createdAt  DateTime @default(now())
+  score      Int
+//  stories    Story[]
+}
+
+model Story {
+  id       Int      @id @default(autoincrement())
+  // chat     TestChat @relation(fields: [chatId], references: [id])
+  botId    String
+  query    Question @relation(fields: [queryId], references: [id], onDelete: Cascade)
+  queryId  Int
+  answer   Answer   @relation(fields: [answerId], references: [id])
+  answerId Int
+
+  @@unique([queryId, answerId, botId])
+}
