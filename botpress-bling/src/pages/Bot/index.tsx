@@ -28,13 +28,12 @@ export default () => {
           },
         });
       })(),
-    { staleTime: Infinity },
+    { staleTime: Infinity, suspense: true },
   );
 
   const [chat, setChat] = useState<Question[]>([]);
   const [botId, setBotId] = useState<string>('9b3c6d4cdf140b81.9d449cc50c01645d');
   const [queryId, setSelectedQueryId] = useState<number | undefined>(undefined);
-  console.log('queries', queryId);
   const { data: answers } = useQuery(
     ['chat.answers', queryId],
     () =>

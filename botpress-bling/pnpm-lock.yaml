@@ -36,6 +36,7 @@ specifiers:
   react: ^18.2.0
   react-dom: ^18.2.0
   react-router-dom: ^6.9.0
+  react-ssr-prepass: ^1.5.0
   react-use: ^17.4.0
   serve-static: ^1.15.0
   tailwindcss: ^3.3.0
@@ -65,6 +66,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.9.0_biqbaboplfbrettd7655fr4n2y
+  react-ssr-prepass: 1.5.0_react@18.2.0
   react-use: 17.4.0_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
@@ -3306,6 +3308,14 @@ packages:
       react: '>=16.8'
     dependencies:
       '@remix-run/router': 1.4.0
+      react: 18.2.0
+    dev: false
+
+  /react-ssr-prepass/1.5.0_react@18.2.0:
+    resolution: {integrity: sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
       react: 18.2.0
     dev: false
 

@@ -152,8 +152,6 @@ export const Chat = memo((props: CharProps) => {
     setQueries([]);
   }, [props.queries]);
 
-  console.log(newQueries);
-
   const stories = props.queries
     .map((query) => (
       <Story
