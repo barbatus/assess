@@ -1,0 +1,43 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgres://barbatus:8vG4EgWFuYmS@ep-rough-sun-916444-pooler.eu-central-1.aws.neon.tech/goodreads?pgbouncer=true&connect_timeout=10"
+  directUrl = "postgres://barbatus:8vG4EgWFuYmS@ep-rough-sun-916444.eu-central-1.aws.neon.tech/goodreads?connect_timeout=10"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  books     UserBook[]
+}
+
+model Book {
+  id        Int       @id @default(autoincrement())
+  title     String
+  author    String
+  cover     String?
+  users     UserBook[]
+  @@unique([title, author])
+}
+
+// enum BookStatus {
+//   READING
+//   READ
+//   WANT_TO_READ
+// }
+
+model UserBook {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  book      Book      @relation(fields: [bookId], references: [id])
+  bookId    Int
+  date      DateTime
+  status    String
+  rating    Int?
+  @@unique([userId, bookId])
+}
